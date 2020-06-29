@@ -5,7 +5,8 @@ create table statements
 	name varchar,
 	inn varchar,
 	payment_details varchar,
-	last_updated timestamp
+	last_updated timestamp,
+	pack_id varchar
 );
 
 create table dictionaries

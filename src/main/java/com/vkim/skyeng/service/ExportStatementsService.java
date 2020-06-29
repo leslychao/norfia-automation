@@ -6,6 +6,7 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 import com.vkim.skyeng.dto.AppConfigDto;
+import com.vkim.skyeng.dto.DictionaryDto;
 import com.vkim.skyeng.dto.StatementDto;
 import com.vkim.skyeng.entity.StatementEntity;
 import com.vkim.skyeng.mapper.BeanMapper;
@@ -15,10 +16,13 @@ import com.vkim.skyeng.service.xssf.XlsService;
 import com.vkim.skyeng.service.xssf.XlsServiceImpl.SheetData;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,26 +33,67 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ExportStatementsService extends AbstractCrudService<StatementDto, StatementEntity> {
 
+  private static final Pattern QUOTES_VALUE_PATTERN = Pattern.compile("(?<=\")[^\"]+(?=\")");
+
   private XlsService xlsService;
   private BeanMapper<StatementDto, StatementEntity> beanMapper;
   private StatementRepository statementRepository;
+  private DictionaryService dictionaryService;
 
   @Autowired
   public ExportStatementsService(XlsService xlsService,
       BeanMapper<StatementDto, StatementEntity> beanMapper,
-      StatementRepository statementRepository) {
+      StatementRepository statementRepository,
+      DictionaryService dictionaryService) {
     this.xlsService = xlsService;
     this.beanMapper = beanMapper;
     this.statementRepository = statementRepository;
+    this.dictionaryService = dictionaryService;
   }
 
-  public void processOrgName(boolean removeQuotes, boolean excludeIndividual) {
-    if (removeQuotes) {
+  public List<StatementDto> findByPackId(String packId) {
+    return statementRepository.findByPackId(packId)
+        .stream()
+        .map(beanMapper::mapToDto)
+        .collect(toList());
+  }
 
-    }
+  static boolean contains(String legalPersonType, String actualCompanyName) {
+    return Arrays.stream(legalPersonType.split(" ")).allMatch(s -> {
+      Pattern pattern = Pattern
+          .compile("\\b(" + s + ")\\b", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+      Matcher matcher = pattern.matcher(actualCompanyName);
+      return matcher.find();
+    });
+  }
 
+  public void processOrgName(boolean excludeIndividual, String packId) {
+    List<StatementDto> statementDtos = findByPackId(packId);
+    List<DictionaryDto> dictionaryDtos = dictionaryService
+        .findByDictionaryAndKey("dictionary_organization", "name_regex");
     if (excludeIndividual) {
-
+      Iterator<StatementDto> statementDtoIterator = statementDtos.iterator();
+      while (statementDtoIterator.hasNext()) {
+        StatementDto statementDto = statementDtoIterator.next();
+        String actualCompanyName = statementDto.getName();
+        boolean match = false;
+        for (DictionaryDto dictionaryDto : dictionaryDtos) {
+          String legalPersonType = dictionaryDto.getValue();
+          if (contains(legalPersonType, actualCompanyName)) {
+            Matcher matcher = QUOTES_VALUE_PATTERN.matcher(actualCompanyName);
+            if (matcher.find()) {
+              String shortName = matcher.group();
+              statementDto.setName(shortName);
+            }
+            update(statementDto);
+            match = true;
+            break;
+          }
+        }
+        if (!match) {
+          delete(statementDto.getId());
+        }
+      }
     }
   }
 
@@ -69,7 +114,7 @@ public class ExportStatementsService extends AbstractCrudService<StatementDto, S
       throw new RuntimeException(e);
     }
     List<StatementDto> statementsFromXls = getStatementsToExport(sheetData,
-        UUID.randomUUID().toString());
+        appConfigDto.getPackId());
     List<StatementDto> statementsFromDb = persistStatementsIntoDb(statementsFromXls);
     log.info("export statements successfully completed!");
     return statementsFromDb;

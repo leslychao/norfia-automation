@@ -1,6 +1,5 @@
 package com.vkim.skyeng.entity;
 
-import com.vkim.skyeng.dto.BaseDto;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -9,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "dictionaries")

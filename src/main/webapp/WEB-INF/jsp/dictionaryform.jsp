@@ -5,24 +5,28 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8 order-md-1">
-			<form:form class="needs-validation" method="POST" action="/home/addDictionary" modelAttribute="dictionary">
+			<form:form class="needs-validation" method="POST"
+				action="/home/addDictionary" modelAttribute="dictionary">
 				<form:input type="hidden" path="id" />
 				<div class="form-row">
 					<div class="col-md-6 mb-3">
-						<label for="sheetName" required>Имя справочника</label> 
-						<form:input class="form-control" id="dictionary" path="dictionary" placeholder="Имя справочника" required="true" />
+						<label for="sheetName" required>Имя справочника</label>
+						<form:input class="form-control" id="dictionary" path="dictionary"
+							placeholder="Имя справочника" required="true" />
 						<div class="invalid-feedback">Обязательно к заполнению</div>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="col-md-6 mb-6">
-						<label for="skipRowNum">Название свойства</label> 
-						<form:input class="form-control" id="key" path="key" placeholder="Название свойства" required="true" />
+						<label for="skipRowNum">Название свойства</label>
+						<form:input class="form-control" id="key" path="key"
+							placeholder="Название свойства" required="true" />
 						<div class="invalid-feedback">Обязательно к заполнению</div>
 					</div>
 					<div class="col-md-6 mb-6">
-						<label for="headerRowNum">Значение свойства</label> 
-						<form:input class="form-control" id="value" path="value" placeholder="Значение свойства" required="true" />
+						<label for="headerRowNum">Значение свойства</label>
+						<form:input class="form-control" id="value" path="value"
+							placeholder="Значение свойства" required="true" />
 						<div class="invalid-feedback">Обязательно к заполнению</div>
 					</div>
 				</div>

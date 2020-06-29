@@ -34,7 +34,7 @@ public class HomeController {
   @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
   public String home(Model model, HttpSession session) {
     AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
-    model.addAttribute("statements", exportStatementsService.exportStatements(appConfigDto));
+    model.addAttribute("statements", exportStatementsService.findByPackId(appConfigDto.getPackId()));
     model.addAttribute("localDateTimeFormatter", DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     return "home";
   }
@@ -86,8 +86,10 @@ public class HomeController {
   }
 
   @RequestMapping(value = {"/home/processOrgName"}, method = RequestMethod.GET)
-  public RedirectView processOrgName(@RequestParam(defaultValue = "false") boolean removeQuotes, @RequestParam(defaultValue = "false") boolean excludeIndividual) {
-    exportStatementsService.processOrgName(removeQuotes, excludeIndividual);
+  public RedirectView processOrgName(HttpSession session,
+      @RequestParam(defaultValue = "false") boolean excludeIndividual) {
+    AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
+    exportStatementsService.processOrgName(excludeIndividual, appConfigDto.getPackId());
     return new RedirectView("/home");
   }
 }

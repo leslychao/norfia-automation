@@ -1,12 +1,15 @@
 package com.vkim.skyeng.dto;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
+@RequiredArgsConstructor
 public class AppConfigDto extends BaseDto {
 
   private byte[] fileData;
@@ -17,5 +20,6 @@ public class AppConfigDto extends BaseDto {
   private int skipRowNum;
   private int headerRowNum;
   private String lastUrl;
+  @NonNull
   private String packId;
 }

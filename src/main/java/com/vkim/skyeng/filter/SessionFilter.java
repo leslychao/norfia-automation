@@ -2,6 +2,7 @@ package com.vkim.skyeng.filter;
 
 import com.vkim.skyeng.dto.AppConfigDto;
 import java.io.IOException;
+import java.util.UUID;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,7 +24,7 @@ public class SessionFilter implements Filter {
     HttpSession httpSession = req.getSession();
     AppConfigDto appConfigDto = (AppConfigDto) httpSession.getAttribute("app_config");
     if (appConfigDto == null) {
-      appConfigDto = new AppConfigDto();
+      appConfigDto = new AppConfigDto(UUID.randomUUID().toString());
       httpSession.setAttribute("app_config", appConfigDto);
     }
     appConfigDto.setLastUrl(req.getRequestURI());

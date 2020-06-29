@@ -26,7 +26,8 @@
 								<td>${dictionary.value}</td>
 								<td>
 									<p data-placement="top" data-toggle="tooltip" title="Edit">
-										<a class="btn btn-primary btn-xs" href="/home/editDictionary?id=${dictionary.id}"> <span
+										<a class="btn btn-primary btn-xs"
+											href="/home/editDictionary?id=${dictionary.id}"> <span
 											class="glyphicon glyphicon-pencil"></span>
 										</a>
 									</p>

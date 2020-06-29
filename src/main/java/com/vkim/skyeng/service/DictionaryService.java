@@ -1,9 +1,12 @@
 package com.vkim.skyeng.service;
 
+import static java.util.stream.Collectors.toList;
+
 import com.vkim.skyeng.dto.DictionaryDto;
 import com.vkim.skyeng.entity.DictionaryEntity;
 import com.vkim.skyeng.mapper.BeanMapper;
 import com.vkim.skyeng.repository.DictionaryRepository;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -22,6 +25,13 @@ public class DictionaryService extends AbstractCrudService<DictionaryDto, Dictio
       DictionaryRepository dictionaryRepository) {
     this.beanMapper = beanMapper;
     this.dictionaryRepository = dictionaryRepository;
+  }
+
+  public List<DictionaryDto> findByDictionaryAndKey(String dictionary, String key) {
+    return dictionaryRepository.findByDictionaryAndKey(dictionary, key)
+        .stream()
+        .map(beanMapper::mapToDto)
+        .collect(toList());
   }
 
   @Override

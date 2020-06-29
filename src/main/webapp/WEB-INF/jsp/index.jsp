@@ -39,12 +39,6 @@
 			<div class="modal-body">
 				<form method="GET" action="/home/processOrgName">
 					<section class="section-preview">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input"
-								id="removeQuotes" name="removeQuotes"> <label
-								class="custom-control-label" for="removeQuotes">Убрать
-								ковычки</label>
-						</div>
 						<div class="my-2"></div>
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input"
@@ -55,7 +49,8 @@
 						<div class="my-2"></div>
 					</section>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
 						<button type="submit" class="btn btn-primary">Send</button>
 					</div>
 				</form>
