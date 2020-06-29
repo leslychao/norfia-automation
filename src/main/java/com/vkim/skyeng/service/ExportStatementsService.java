@@ -64,20 +64,15 @@ public class ExportStatementsService extends AbstractCrudService<StatementDto, S
   }
 
   List<StatementDto> persistStatementsIntoDb(List<StatementDto> statementsFromXls) {
-    try {
-      if (!statementsFromXls.isEmpty()) {
-        log.info("number of statements to export {}", statementsFromXls.size());
-        return statementsFromXls
-            .stream()
-            .map(statementDto -> save(statementDto))
-            .collect(toList());
-      } else {
-        log.info("nothing to export");
-      }
-    } catch (RuntimeException e) {
-      log.error(e.getMessage());
+    if (statementsFromXls.isEmpty()) {
+      log.info("nothing to export");
+      return Collections.EMPTY_LIST;
     }
-    return Collections.EMPTY_LIST;
+    log.info("number of statements to export {}", statementsFromXls.size());
+    return statementsFromXls
+        .stream()
+        .map(statementDto -> save(statementDto))
+        .collect(toList());
   }
 
   private List<StatementDto> getStatementsToExport(SheetData sheetData) {

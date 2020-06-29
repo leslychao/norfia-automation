@@ -70,14 +70,6 @@ public class XlsServiceImpl implements XlsService {
         excelRowContentCollback);
   }
 
-  @Override
-  public SheetData processXls(String docFilePath, String sheetName, int skipRowNum,
-      int headerRowNum, ExcelRowContentCollback excelRowContentCollback)
-      throws InvalidFormatException {
-    return doProcessXls(OPCPackage.open(docFilePath), sheetName, skipRowNum, headerRowNum,
-        excelRowContentCollback);
-  }
-
   void processSheet(StylesTable stylesTable, ReadOnlySharedStringsTable readOnlySharedStringsTable,
       SheetContentsHandler sheetContentsHandler,
       InputStream inputStream) throws IOException, SAXException {

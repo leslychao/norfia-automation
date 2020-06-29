@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -61,26 +60,27 @@ public class HomeController {
   }
 
   @RequestMapping(value = {"/home/dictionaryform"}, method = RequestMethod.GET)
-  public String dictionaryForm(Model model, @RequestParam("id") Long id) {
+  public String dictionaryForm(Model model) {
     model.addAttribute("dictionary", new DictionaryDto());
     return "dictionaryform";
   }
 
   @RequestMapping(value = {"/home/addDictionary"}, method = RequestMethod.POST)
-  public RedirectView addDictionary(@ModelAttribute("employee") DictionaryDto dictionaryDto) {
+  public RedirectView addDictionary(@ModelAttribute DictionaryDto dictionaryDto) {
     log.info("add dictionary {}", dictionaryDto);
-    dictionaryService.save(dictionaryDto);
+    dictionaryService.update(dictionaryDto);
     return new RedirectView("/home/dictionary");
   }
 
   @RequestMapping(value = {"/home/editDictionary"}, method = RequestMethod.GET)
-  public String editDictionary(RedirectAttributes attributes, @RequestParam("id") Long id) {
-    attributes.addAttribute("dictionary", dictionaryService.get(id));
+  public String editDictionary(Model model, @RequestParam long id) {
+    model.addAttribute("dictionary", dictionaryService.get(id));
     return "dictionaryform";
   }
 
   @RequestMapping(value = {"/home/removeDictionary"}, method = RequestMethod.GET)
   public RedirectView removeDictionary(@RequestParam("id") Long id) {
+    log.info("remove dictionary with id {}", id);
     dictionaryService.delete(id);
     return new RedirectView("/home/dictionary");
   }

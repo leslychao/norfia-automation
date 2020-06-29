@@ -6,6 +6,7 @@
 	<div class="row">
 		<div class="col-md-8 order-md-1">
 			<form:form class="needs-validation" method="POST" action="/home/addDictionary" modelAttribute="dictionary">
+				<form:input type="hidden" path="id" />
 				<div class="form-row">
 					<div class="col-md-6 mb-3">
 						<label for="sheetName" required>Имя справочника</label> 
