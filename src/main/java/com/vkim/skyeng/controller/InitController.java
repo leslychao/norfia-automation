@@ -34,7 +34,7 @@ public class InitController {
     appConfigDto.setFileSize(xlsFile.getSize());
     appConfigDto.setSheetName(sheetName);
     appConfigDto.setSkipRowNum(skipRowNum);
-    appConfigDto.setHeaderRowNum(headerRowNum);
+    appConfigDto.setHeaderRowNum(headerRowNum - 1);
     return new RedirectView("/home");
   }
 }

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,16 @@ public class ExportStatementsService extends AbstractCrudService<StatementDto, S
     this.statementRepository = statementRepository;
   }
 
+  public void processOrgName(boolean removeQuotes, boolean excludeIndividual) {
+    if (removeQuotes) {
+
+    }
+
+    if (excludeIndividual) {
+
+    }
+  }
+
   public List<StatementDto> exportStatements(AppConfigDto appConfigDto) {
     log.info("start exportStatements");
     if (appConfigDto == null || appConfigDto.getFileData() == null
@@ -57,7 +68,8 @@ public class ExportStatementsService extends AbstractCrudService<StatementDto, S
     } catch (InvalidFormatException | IOException e) {
       throw new RuntimeException(e);
     }
-    List<StatementDto> statementsFromXls = getStatementsToExport(sheetData);
+    List<StatementDto> statementsFromXls = getStatementsToExport(sheetData,
+        UUID.randomUUID().toString());
     List<StatementDto> statementsFromDb = persistStatementsIntoDb(statementsFromXls);
     log.info("export statements successfully completed!");
     return statementsFromDb;
@@ -75,15 +87,15 @@ public class ExportStatementsService extends AbstractCrudService<StatementDto, S
         .collect(toList());
   }
 
-  private List<StatementDto> getStatementsToExport(SheetData sheetData) {
+  private List<StatementDto> getStatementsToExport(SheetData sheetData, String packId) {
     return ofNullable(sheetData.getData())
         .orElse(emptyList())
         .stream()
-        .map(this::toStatementDto)
+        .map(stringStringMap -> toStatementDto(stringStringMap, packId))
         .collect(toList());
   }
 
-  private StatementDto toStatementDto(Map<String, String> statementXls) {
+  private StatementDto toStatementDto(Map<String, String> statementXls, String packId) {
     String credit = getStringCellValue(statementXls, "Кредит", null);
     String name = getStringCellValue(statementXls, "Наименование ", null);
     String inn = getStringCellValue(statementXls, "ИНН", null);
@@ -94,6 +106,7 @@ public class ExportStatementsService extends AbstractCrudService<StatementDto, S
     statementDto.setName(name);
     statementDto.setInn(inn);
     statementDto.setPaymentDetails(paymentDetails);
+    statementDto.setPackId(packId);
     return statementDto;
   }
 

@@ -17,4 +17,5 @@ public class AppConfigDto extends BaseDto {
   private int skipRowNum;
   private int headerRowNum;
   private String lastUrl;
+  private String packId;
 }

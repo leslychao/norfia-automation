@@ -15,5 +15,6 @@ public class StatementDto extends BaseDto {
   private String name;
   private String inn;
   private String paymentDetails;
+  private String packId;
 
 }

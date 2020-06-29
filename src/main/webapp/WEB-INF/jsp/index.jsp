@@ -32,39 +32,33 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="orgNameModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">New message</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
 			<div class="modal-body">
-				<form>
+				<form method="GET" action="/home/processOrgName">
 					<section class="section-preview">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input"
-								id="removeQuotes"> <label class="custom-control-label"
-								for="removeQuotes">Убрать ковычки</label>
+								id="removeQuotes" name="removeQuotes"> <label
+								class="custom-control-label" for="removeQuotes">Убрать
+								ковычки</label>
 						</div>
 						<div class="my-2"></div>
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input"
-								id="excludeIndividual"> <label
+								id="excludeIndividual" name="excludeIndividual"> <label
 								class="custom-control-label" for="excludeIndividual">Оставить
 								только организации</label>
 						</div>
 						<div class="my-2"></div>
 					</section>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Send</button>
+					</div>
 				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Send message</button>
 			</div>
 		</div>
 	</div>
@@ -76,7 +70,7 @@
 				<th scope="col">Кредит</th>
 				<th scope="col">
 					<button type="button" class="btn btn-primary" data-toggle="modal"
-						data-target="#exampleModal" data-whatever="@mdo">Наименование</button>
+						data-target="#orgNameModal" data-whatever="@mdo">Наименование</button>
 				</th>
 				<th scope="col">ИНН</th>
 				<th scope="col">Назначение платежа</th>

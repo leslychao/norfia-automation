@@ -28,4 +28,6 @@ public class StatementEntity extends BaseEntity {
   private String inn;
   @Column(name = "payment_details")
   private String paymentDetails;
+  @Column(name = "pack_id")
+  private String packId;
 }

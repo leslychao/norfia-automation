@@ -84,4 +84,10 @@ public class HomeController {
     dictionaryService.delete(id);
     return new RedirectView("/home/dictionary");
   }
+
+  @RequestMapping(value = {"/home/processOrgName"}, method = RequestMethod.GET)
+  public RedirectView processOrgName(@RequestParam(defaultValue = "false") boolean removeQuotes, @RequestParam(defaultValue = "false") boolean excludeIndividual) {
+    exportStatementsService.processOrgName(removeQuotes, excludeIndividual);
+    return new RedirectView("/home");
+  }
 }
