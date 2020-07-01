@@ -25,6 +25,8 @@ public class StatementEntity extends BaseEntity {
   private String credit;
   @Column(name = "name")
   private String name;
+  @Column(name = "short_name")
+  private String shortName;
   @Column(name = "inn")
   private String inn;
   @Column(name = "payment_details")
