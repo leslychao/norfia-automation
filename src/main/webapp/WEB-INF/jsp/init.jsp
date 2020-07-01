@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <div class="container">
 	<div class="row">
-		<div class="mt-5 col-md-8 order-md-1">
+		<div class="mt-5 mx-auto col-md-8 order-md-1">
 			<h4 class="mb-3">Ленка Пенка введи параметры конфигурации, если
 				че спроси у Норфии</h4>
 			<form class="needs-validation" method="POST" action="/init/submit"

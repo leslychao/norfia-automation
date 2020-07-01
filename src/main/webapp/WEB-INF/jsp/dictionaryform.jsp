@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <div class="container">
 	<div class="row">
-		<div class="mt-5 col-md-8 order-md-1">
+		<div class="mt-5 mx-auto col-md-8 order-md-1">
 			<form:form class="needs-validation" method="POST"
 				action="/home/addDictionary" modelAttribute="dictionary">
 				<form:input type="hidden" path="id" />

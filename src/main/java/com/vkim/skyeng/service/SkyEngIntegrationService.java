@@ -1,12 +1,12 @@
 package com.vkim.skyeng.service;
 
-import static java.util.stream.Collectors.groupingBy;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class SkyEngIntegrationService {
   @Setter
   @EqualsAndHashCode
   @ToString
-  static class Contract {
+  static class Contract implements Comparable<Contract> {
 
     private Long id;
     private Manager currentSalesManager;
@@ -68,6 +68,17 @@ public class SkyEngIntegrationService {
         priority++;
       }
       return priority;
+    }
+
+    @Override
+    public int compareTo(Contract o) {
+      if (this.getPriority() == o.getPriority()) {
+        return 0;
+      } else if (this.getPriority() < o.getPriority()) {
+        return -1;
+      } else {
+        return 1;
+      }
     }
   }
 
@@ -204,9 +215,16 @@ public class SkyEngIntegrationService {
   }
 
   public static void main(String[] args) throws URISyntaxException {
-    List<ExternalCompany> result = getCompanyByNameAndInn("софтвайс", "7810372867");
-    System.out.println(result.stream().collect(
-        groupingBy(ExternalCompany::getCompanyName,
-            Collectors.mapping(externalCompany -> getContract(externalCompany.getContractId()), Collectors.toList()))));;
+    List<ExternalCompany> externalCompanies = getCompanyByNameAndInn("софтвайс", "7810372867");
+
+    Map<String, Contract> contractMap = externalCompanies.stream()
+        .collect(Collectors.groupingBy(ExternalCompany::getCompanyName,
+            Collectors.mapping(externalCompany -> getContract(externalCompany.getContractId()),
+                Collectors.collectingAndThen(Collectors.maxBy(Contract::compareTo),
+                    Optional::get))));
+
+    contractMap.forEach((s, contract) -> {
+      System.out.println(s + "=" + contract);
+    });
   }
 }

@@ -12,7 +12,7 @@
 				<c:choose>
 					<c:when test="${sessionScope.app_config.lastUrl ne '/init'}">
 						<li class="nav-item"><a class="nav-link"
-							href="/home/clearskyengcookie">Очистить куки skyen</a></li>
+							href="/home/clearskyengcookie">Очистить куки skyeng</a></li>
 					</c:when>
 				</c:choose>
 				<li class="nav-item">
@@ -22,13 +22,17 @@
 				</li>
 			</ul>
 		</div>
-		<div class="mx-auto order-0">
-			<a class="navbar-brand mx-auto" href="#">Запустить интеграцию</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target=".dual-collapse2">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-		</div>
+		<c:choose>
+			<c:when test="${sessionScope.app_config.lastUrl eq '/home'}">
+				<div class="mx-auto order-0">
+					<a class="navbar-brand mx-auto" href="#">Запустить интеграцию</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target=".dual-collapse2">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+			</c:when>
+		</c:choose>
 		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item"><a class="nav-link" href="#">Support</a></li>
