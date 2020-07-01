@@ -3,6 +3,8 @@ package com.vkim.skyeng.entity;
 import com.vkim.skyeng.SyncState;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,5 +36,6 @@ public class StatementEntity extends BaseEntity {
   @Column(name = "pack_id")
   private String packId;
   @Column(name = "sync_state")
+  @Enumerated(EnumType.STRING)
   private SyncState syncState;
 }
