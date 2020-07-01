@@ -4,10 +4,10 @@ import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class CommonUtils {
 
@@ -28,13 +28,30 @@ public class CommonUtils {
         });
   }
 
-  public static boolean contains(String str, String searchStr) {
-    return Arrays.stream(str.split(" ")).allMatch(s -> {
-      Pattern pattern = Pattern
-          .compile("\\b(" + s + ")\\b", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-      Matcher matcher = pattern.matcher(searchStr);
-      return matcher.find();
-    });
+  public static Object getNode(Object jsonObject, List<String> path) {
+    return getNode(jsonObject, path, path.size() - 1, 0);
+  }
+
+  public static Object getNode(Object jsonNode, List<String> path, int position, int step) {
+    if (position >= path.size() || position < 0) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (step > position) {
+      return jsonNode;
+    }
+    String key = path.get(step);
+    if (jsonNode instanceof JSONArray) {
+      JSONArray jsonArray = (JSONArray) jsonNode;
+      return getNode(jsonArray.get(Integer.parseInt(key)), path, position, ++step);
+    } else if (jsonNode instanceof JSONObject) {
+      JSONObject jsonObject = (JSONObject) jsonNode;
+      if (jsonObject.has(key)) {
+        return getNode(jsonObject.get(key), path, position, ++step);
+      }
+      return null;
+    } else {
+      return jsonNode;
+    }
   }
 
 }

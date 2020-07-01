@@ -1,6 +1,5 @@
 package com.vkim.skyeng.service;
 
-import static com.vkim.skyeng.util.CommonUtils.contains;
 import static com.vkim.skyeng.util.CommonUtils.getStringCellValue;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
@@ -17,6 +16,7 @@ import com.vkim.skyeng.service.xssf.XlsService;
 import com.vkim.skyeng.service.xssf.XlsServiceImpl.SheetData;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -60,6 +60,16 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
         .map(beanMapper::mapToDto)
         .collect(toList());
   }
+
+  private boolean contains(String str, String searchStr) {
+    return Arrays.stream(str.split(" ")).allMatch(s -> {
+      Pattern pattern = Pattern
+          .compile("\\b(" + s + ")\\b", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+      Matcher matcher = pattern.matcher(searchStr);
+      return matcher.find();
+    });
+  }
+
 
   public void processOrgName(boolean excludeIndividual, String packId) {
     List<StatementDto> statementDtos = findByPackId(packId);

@@ -1,5 +1,8 @@
 package com.vkim.skyeng.service;
 
+import com.vkim.skyeng.dto.AppConfigDto;
+import com.vkim.skyeng.dto.CompanyDto;
+import com.vkim.skyeng.dto.StatementDto;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,7 +16,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -23,6 +25,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,7 +44,6 @@ public class SkyEngIntegrationService {
     private Long dealId;
     private Long contractId;
     private Long inn;
-    boolean innMatched;
 
   }
 
@@ -49,7 +51,7 @@ public class SkyEngIntegrationService {
   @Setter
   @EqualsAndHashCode
   @ToString
-  static class Contract implements Comparable<Contract> {
+  public static class Contract implements Comparable<Contract> {
 
     private Long id;
     private Manager currentSalesManager;
@@ -94,7 +96,7 @@ public class SkyEngIntegrationService {
     private String surname;
   }
 
-  public static enum ManagerType {
+  public enum ManagerType {
     KAM("Current Sales Manager"), MC("Support Manager"), AM("Administrative Manager");
 
     private String name;
@@ -102,6 +104,16 @@ public class SkyEngIntegrationService {
     ManagerType(String name) {
       this.name = name;
     }
+  }
+
+  private CompanyService companyService;
+  private StatementService statementService;
+
+  @Autowired
+  public SkyEngIntegrationService(CompanyService companyService,
+      StatementService statementService) {
+    this.companyService = companyService;
+    this.statementService = statementService;
   }
 
   static String doGet(URI uri) {
@@ -113,7 +125,7 @@ public class SkyEngIntegrationService {
       if (response.getStatusLine().getStatusCode() != 200) {
         throw new RuntimeException(
             "HTTP ошибка с кодом: " + response.getStatusLine().getStatusCode()
-                + ". Detail message: " +
+                + " Detail message: " +
                 response.getStatusLine().getReasonPhrase());
       }
       HttpEntity entity = response.getEntity();
@@ -127,41 +139,53 @@ public class SkyEngIntegrationService {
     }
   }
 
-  public static List<ExternalCompany> getCompanyByNameAndInn(String companyName, String inn)
-      throws URISyntaxException {
+  static void setInn(ExternalCompany externalCompany) {
+    String stringEntity;
+    try {
+      stringEntity = doGet(new URIBuilder(
+          "https://backend.skyeng.ru/api/companies/" + externalCompany.getCompanyId()
+              + "/pipedrive/organizations/").build());
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+    JSONObject jsonObject = new JSONObject(stringEntity);
+    externalCompany.setInn(jsonObject.getJSONObject("data").getLong("tin"));
+  }
+
+  public static List<ExternalCompany> getCompanies(String companyName) {
     List<ExternalCompany> companies = new ArrayList<>();
-    String stringEntity = doGet(new URIBuilder("https://backend.skyeng.ru/api/companies/by-name/")
-        .setParameter("name", companyName).build());
+    String stringEntity;
+    try {
+      stringEntity = doGet(new URIBuilder("https://backend.skyeng.ru/api/companies/by-name/")
+          .setParameter("name", companyName).build());
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
     JSONObject jsonObject = new JSONObject(stringEntity);
     JSONArray jsonArray = (JSONArray) jsonObject.get("data");
     for (int i = 0; i < jsonArray.length(); i++) {
-      ExternalCompany company = new ExternalCompany();
-      company.setCompanyId(jsonArray.getJSONObject(i).getLong("companyId"));
-      company.setCompanyName(jsonArray.getJSONObject(i).getString("companyName"));
-      company.setPaymentType(jsonArray.getJSONObject(i).getString("paymentType"));
-      company.setDealId(jsonArray.getJSONObject(i).getLong("dealId"));
-      company.setContractId(jsonArray.getJSONObject(i).getLong("contractId"));
-      if (!company.getPaymentType().equals("special_offer")) {
-        companies.add(company);
+      ExternalCompany externalCompany = new ExternalCompany();
+      externalCompany.setCompanyId(jsonArray.getJSONObject(i).getLong("companyId"));
+      externalCompany.setCompanyName(jsonArray.getJSONObject(i).getString("companyName"));
+      externalCompany.setPaymentType(jsonArray.getJSONObject(i).getString("paymentType"));
+      externalCompany.setDealId(jsonArray.getJSONObject(i).getLong("dealId"));
+      externalCompany.setContractId(jsonArray.getJSONObject(i).getLong("contractId"));
+      setInn(externalCompany);
+      if (!externalCompany.getPaymentType().equals("special_offer")) {
+        companies.add(externalCompany);
       }
-      String pipedriveStringEntity = doGet(new URIBuilder(
-          "https://backend.skyeng.ru/api/companies/" + company.getCompanyId()
-              + "/pipedrive/organizations/").build());
-      JSONObject pipedriveJsonObject = new JSONObject(pipedriveStringEntity);
-      company.setInn(pipedriveJsonObject.getJSONObject("data").getLong("tin"));
-      company.setInnMatched(StringUtils.equals(company.getInn().toString(), inn));
     }
     return companies;
   }
 
   public static Contract getContract(Long id) {
-    String contractStringEntity = null;
+    String contractStringEntity;
     try {
       contractStringEntity = doGet(new URIBuilder(
           "https://backend.skyeng.ru/api/companies/deals/contracts/" + id
               + "/").build());
     } catch (URISyntaxException e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
     if (contractStringEntity == null) {
       throw new RuntimeException("contract not found id: " + id);
@@ -214,17 +238,20 @@ public class SkyEngIntegrationService {
     return contract;
   }
 
-  public static void main(String[] args) throws URISyntaxException {
-    List<ExternalCompany> externalCompanies = getCompanyByNameAndInn("софтвайс", "7810372867");
+  public void syncCompanies(AppConfigDto appConfigDto) {
+    List<StatementDto> statements = statementService.findByPackId(appConfigDto.getPackId());
+    statements.forEach(statementDto -> {
+      List<ExternalCompany> externalCompanies = getCompanies(statementDto.getName());
+      boolean innMatched = externalCompanies.stream()
+          .allMatch(externalCompany -> externalCompany.getInn().equals(statementDto.getInn()));
+      Map<String, Contract> companyContractMap = externalCompanies.stream()
+          .collect(Collectors.groupingBy(ExternalCompany::getCompanyName,
+              Collectors.mapping(externalCompany -> getContract(externalCompany.getContractId()),
+                  Collectors.collectingAndThen(Collectors.maxBy(Contract::compareTo),
+                      Optional::get))));
 
-    Map<String, Contract> contractMap = externalCompanies.stream()
-        .collect(Collectors.groupingBy(ExternalCompany::getCompanyName,
-            Collectors.mapping(externalCompany -> getContract(externalCompany.getContractId()),
-                Collectors.collectingAndThen(Collectors.maxBy(Contract::compareTo),
-                    Optional::get))));
+      CompanyDto companyDto = new CompanyDto();
 
-    contractMap.forEach((s, contract) -> {
-      System.out.println(s + "=" + contract);
     });
   }
 }

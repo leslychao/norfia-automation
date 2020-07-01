@@ -1,5 +1,6 @@
 package com.vkim.skyeng.entity;
 
+import com.vkim.skyeng.SyncState;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
@@ -30,4 +31,6 @@ public class StatementEntity extends BaseEntity {
   private String paymentDetails;
   @Column(name = "pack_id")
   private String packId;
+  @Column(name = "sync_state")
+  private SyncState syncState;
 }

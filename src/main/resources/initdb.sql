@@ -6,7 +6,8 @@ create table statements
 	inn varchar,
 	payment_details varchar,
 	last_updated timestamp,
-	pack_id varchar
+	pack_id varchar,
+	sync_state varchar
 );
 
 create table dictionaries
@@ -28,6 +29,13 @@ create sequence statements_seq
     NO CYCLE;
 
 create sequence dictionaries_seq
+    increment by 1
+    start with 1
+    minvalue 1
+    NO MAXVALUE
+    NO CYCLE;
+
+create sequence companies_seq
     increment by 1
     start with 1
     minvalue 1

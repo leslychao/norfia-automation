@@ -20,6 +20,11 @@
 						Другой документ
 					</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/company">
+						Компании из Выписок B2B
+					</a>
+				</li>
 			</ul>
 		</div>
 		<c:choose>
