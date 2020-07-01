@@ -39,19 +39,16 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
   private BeanMapper<StatementDto, StatementEntity> beanMapper;
   private StatementRepository statementRepository;
   private DictionaryService dictionaryService;
-  private SkyEngIntegrationService skyEngIntegrationService;
 
   @Autowired
   public StatementService(XlsService xlsService,
       BeanMapper<StatementDto, StatementEntity> beanMapper,
       StatementRepository statementRepository,
-      DictionaryService dictionaryService,
-      SkyEngIntegrationService skyEngIntegrationService) {
+      DictionaryService dictionaryService) {
     this.xlsService = xlsService;
     this.beanMapper = beanMapper;
     this.statementRepository = statementRepository;
     this.dictionaryService = dictionaryService;
-    this.skyEngIntegrationService = skyEngIntegrationService;
   }
 
   public List<StatementDto> findByPackId(String packId) {
