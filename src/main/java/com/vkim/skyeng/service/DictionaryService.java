@@ -28,7 +28,7 @@ public class DictionaryService extends AbstractCrudService<DictionaryDto, Dictio
   }
 
   public List<DictionaryDto> findByDictionaryAndKey(String dictionary, String key) {
-    return dictionaryRepository.findByDictionaryAndKey(dictionary, key)
+    return dictionaryRepository.findByDictionaryAndKeyOrderByIdAsc(dictionary, key)
         .stream()
         .map(beanMapper::mapToDto)
         .collect(toList());

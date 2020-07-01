@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DictionaryRepository extends CrudRepository<DictionaryEntity, Long> {
 
-  List<DictionaryEntity> findByDictionaryAndKey(String dictionary, String key);
+  List<DictionaryEntity> findByDictionaryAndKeyOrderByIdAsc(String dictionary, String key);
 }

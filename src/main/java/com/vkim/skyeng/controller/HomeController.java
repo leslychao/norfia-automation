@@ -3,7 +3,7 @@ package com.vkim.skyeng.controller;
 import com.vkim.skyeng.dto.AppConfigDto;
 import com.vkim.skyeng.dto.DictionaryDto;
 import com.vkim.skyeng.service.DictionaryService;
-import com.vkim.skyeng.service.ExportStatementsService;
+import com.vkim.skyeng.service.StatementService;
 import java.time.format.DateTimeFormatter;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -20,21 +20,20 @@ import org.springframework.web.servlet.view.RedirectView;
 @Slf4j
 public class HomeController {
 
-  private ExportStatementsService exportStatementsService;
-
+  private StatementService statementService;
   private DictionaryService dictionaryService;
 
   @Autowired
-  public HomeController(ExportStatementsService exportStatementsService,
+  public HomeController(StatementService statementService,
       DictionaryService dictionaryService) {
-    this.exportStatementsService = exportStatementsService;
+    this.statementService = statementService;
     this.dictionaryService = dictionaryService;
   }
 
   @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
   public String home(Model model, HttpSession session) {
     AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
-    model.addAttribute("statements", exportStatementsService.findByPackId(appConfigDto.getPackId()));
+    model.addAttribute("statements", statementService.findByPackId(appConfigDto.getPackId()));
     model.addAttribute("localDateTimeFormatter", DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     return "home";
   }
@@ -83,13 +82,5 @@ public class HomeController {
     log.info("remove dictionary with id {}", id);
     dictionaryService.delete(id);
     return new RedirectView("/home/dictionary");
-  }
-
-  @RequestMapping(value = {"/home/processOrgName"}, method = RequestMethod.GET)
-  public RedirectView processOrgName(HttpSession session,
-      @RequestParam(defaultValue = "false") boolean excludeIndividual) {
-    AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
-    exportStatementsService.processOrgName(excludeIndividual, appConfigDto.getPackId());
-    return new RedirectView("/home");
   }
 }

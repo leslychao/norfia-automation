@@ -1,7 +1,7 @@
 package com.vkim.skyeng.controller;
 
 import com.vkim.skyeng.dto.AppConfigDto;
-import com.vkim.skyeng.service.ExportStatementsService;
+import com.vkim.skyeng.service.StatementService;
 import java.io.IOException;
 import java.util.UUID;
 import javax.servlet.http.HttpSession;
@@ -16,11 +16,11 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class InitController {
 
-  private ExportStatementsService exportStatementsService;
+  private StatementService statementService;
 
   @Autowired
-  public InitController(ExportStatementsService exportStatementsService) {
-    this.exportStatementsService = exportStatementsService;
+  public InitController(StatementService statementService) {
+    this.statementService = statementService;
   }
 
   @RequestMapping(value = {"/init"})
@@ -46,7 +46,7 @@ public class InitController {
     appConfigDto.setSheetName(sheetName);
     appConfigDto.setSkipRowNum(skipRowNum);
     appConfigDto.setHeaderRowNum(headerRowNum - 1);
-    exportStatementsService.exportStatements(appConfigDto);
+    statementService.processStatementsFromXls(appConfigDto);
     return new RedirectView("/home");
   }
 }

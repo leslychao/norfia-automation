@@ -1,28 +1,39 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <header>
-	<div
-		class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-		<h5 class="my-0 mr-md-auto font-weight-normal">
-			<a class="p-2 text-dark" href="/home">Норфия Индстрис</a>
-		</h5>
-		<nav class="my-2 my-md-0 mr-md-3">
-			<a class="p-2 text-dark" href="/home/dictionary">Справочник</a>
-		</nav>
-		<c:choose>
-			<c:when test="${sessionScope.app_config.lastUrl ne '/init'}">
-				<nav class="my-2 my-md-0 mr-md-3">
-					<a class="p-2 text-dark" href="/home/clearskyengcookie">Очистить
-						куки skyeng</a>
-				</nav>
-			</c:when>
-		</c:choose>
-		<nav class="my-2 my-md-0 mr-md-3">
-			<a class="p-2 text-dark" href="/init">Другой документ</a>
-		</nav>
-		<nav class="my-2 my-md-0 mr-md-3">
-			<a class="p-2 text-dark" href="#">Support</a>
-		</nav>
-		<a class="btn btn-outline-primary" href="#">Sign up</a>
-	</div>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link" href="/home">Norfia
+						Industries</a></li>
+				<li class="nav-item">
+					<a class="nav-link" href="/home/dictionary">Справочник</a>
+				</li>
+				<c:choose>
+					<c:when test="${sessionScope.app_config.lastUrl ne '/init'}">
+						<li class="nav-item"><a class="nav-link"
+							href="/home/clearskyengcookie">Очистить куки skyen</a></li>
+					</c:when>
+				</c:choose>
+				<li class="nav-item">
+					<a class="nav-link" href="/init">
+						Другой документ
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="mx-auto order-0">
+			<a class="navbar-brand mx-auto" href="#">Запустить интеграцию</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target=".dual-collapse2">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+				<li class="nav-item"><a class="nav-link" href="#">Sign up</a></li>
+			</ul>
+		</div>
+	</nav>
 </header>

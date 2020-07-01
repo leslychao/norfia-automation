@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <div class="container">
 	<div class="row">
-		<div class="col-md-8 order-md-1">
+		<div class="mt-5 col-md-8 order-md-1">
 			<h4 class="mb-3">Ленка Пенка введи параметры конфигурации, если
 				че спроси у Норфии</h4>
 			<form class="needs-validation" method="POST" action="/init/submit"
@@ -53,13 +53,4 @@
 			</form>
 		</div>
 	</div>
-
-	<footer class="my-5 pt-5 text-muted text-center text-small">
-		<p class="mb-1">© 2020 Норфия Индстрис</p>
-		<ul class="list-inline">
-			<li class="list-inline-item"><a href="#">Privacy</a></li>
-			<li class="list-inline-item"><a href="#">Terms</a></li>
-			<li class="list-inline-item"><a href="#">Support</a></li>
-		</ul>
-	</footer>
 </div>

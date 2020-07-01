@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StatementRepository extends CrudRepository<StatementEntity, Long> {
 
-  List<StatementEntity> findByPackId(String packId);
+  List<StatementEntity> findByPackIdOrderByIdAsc(String packId);
 }
