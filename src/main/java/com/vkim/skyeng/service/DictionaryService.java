@@ -34,9 +34,9 @@ public class DictionaryService extends AbstractCrudService<DictionaryDto, Dictio
 
   @Transactional(readOnly = true)
   public List<DictionaryDto> findByDictionaryType(DictionaryType dictionaryType) {
-    return dictionaryRepository.findByDictionaryTypeOrderByIdAsc(dictionaryType.toString())
+    return dictionaryRepository.findByDictionaryTypeOrderByIdAsc(dictionaryType)
         .stream()
-        .map(beanMapper::mapToDto)
+        .map(this::mapToDto)
         .collect(toList());
   }
 

@@ -48,7 +48,7 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
   public List<StatementDto> findByPackId(String packId) {
     return statementRepository.findByPackIdOrderByIdAsc(packId)
         .stream()
-        .map(beanMapper::mapToDto)
+        .map(this::mapToDto)
         .collect(toList());
   }
 

@@ -10,23 +10,34 @@
 				<form:input type="hidden" path="id" />
 				<div class="form-row">
 					<div class="col-md-6 mb-3">
-						<label for="sheetName" required>Имя справочника</label>
-						<form:input class="form-control" id="dictionary" path="dictionary"
-							placeholder="Имя справочника" required="true" />
+						<label for="module" required>Модуль</label>
+						<form:input class="form-control" id="module" path="module"
+							placeholder="Модуль" required="true" />
+						<div class="invalid-feedback">Обязательно к заполнению</div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6 mb-3">
+						<label for="dictionaryType" required>Тип справочника</label>
+						<form:input class="form-control" id="dictionaryType"
+							path="dictionaryType" placeholder="Тип справочника"
+							required="true" />
 						<div class="invalid-feedback">Обязательно к заполнению</div>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="col-md-6 mb-6">
-						<label for="skipRowNum">Название свойства</label>
-						<form:input class="form-control" id="key" path="key"
-							placeholder="Название свойства" required="true" />
+						<label for="dictionaryKey">Название свойства</label>
+						<form:input class="form-control" id="dictionaryKey"
+							path="dictionaryKey" placeholder="Название свойства"
+							required="true" />
 						<div class="invalid-feedback">Обязательно к заполнению</div>
 					</div>
 					<div class="col-md-6 mb-6">
-						<label for="headerRowNum">Значение свойства</label>
-						<form:input class="form-control" id="value" path="value"
-							placeholder="Значение свойства" required="true" />
+						<label for="dictionaryValue">Значение свойства</label>
+						<form:input class="form-control" id="dictionaryValue"
+							path="dictionaryValue" placeholder="Значение свойства"
+							required="true" />
 						<div class="invalid-feedback">Обязательно к заполнению</div>
 					</div>
 				</div>

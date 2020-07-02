@@ -291,7 +291,8 @@ public class SkyEngIntegrationService {
               companyDto.setPaymentNumber(matcher.group());
             }
             companyDto.setCompanyName(externalCompany.getCompanyName());
-            companyDto.setInnMatched(statementDto.getInn().equals(externalCompany.getInn()));
+            companyDto
+                .setInnMatched(statementDto.getInn().equals(externalCompany.getInn().toString()));
             companyService.update(companyDto);
             statementDto.setSyncState(SyncState.SYNC_SUCCESS);
             statementService.update(statementDto);

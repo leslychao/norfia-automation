@@ -16,8 +16,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "dictionaries", indexes = {
     @Index(name = "dictionaries_idx_01", columnList = "id", unique = true),
-    @Index(name = "dictionaries_idx_02", columnList = "module", unique = true),
-    @Index(name = "dictionaries_idx_03", columnList = "dictionaryType, dictionaryKey", unique = true)
+    @Index(name = "dictionaries_idx_02", columnList = "module"),
+    @Index(name = "dictionaries_idx_03", columnList = "dictionaryType, dictionaryKey")
 })
 @Getter
 @Setter

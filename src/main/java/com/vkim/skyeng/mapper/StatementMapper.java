@@ -49,6 +49,8 @@ public class StatementMapper implements BeanMapper<StatementDto, StatementEntity
     entity.setShortName(dto.getShortName());
     entity.setInn(dto.getInn());
     entity.setPaymentDetails(dto.getPaymentDetails());
+    entity.setPackId(dto.getPackId());
+    entity.setSyncState(dto.getSyncState());
     return entity;
   }
 }
