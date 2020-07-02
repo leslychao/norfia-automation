@@ -19,6 +19,5 @@ public class StatementDto extends BaseDto {
   private String paymentDetails;
   private String packId;
   private SyncState syncState;
-  private boolean hasWarnings;
 
 }

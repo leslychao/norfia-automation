@@ -257,6 +257,16 @@ public class SkyEngIntegrationService {
     return contract;
   }
 
+  private String extractPaymentNumber(String paymentDetails) {
+    Pattern pattern = Pattern
+        .compile("6[\\d]{3}", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+    Matcher matcher = pattern.matcher(paymentDetails);
+    if (matcher.find()) {
+      return matcher.group();
+    }
+    return null;
+  }
+
   public void syncCompanies(AppConfigDto appConfigDto) {
     List<StatementDto> statements = statementService.findByPackId(appConfigDto.getPackId());
     statements.stream()
@@ -277,25 +287,23 @@ public class SkyEngIntegrationService {
           }
           companyContractMap.forEach((externalCompany, contract) -> {
             if (contract.getId() == null) {
-              log.error("contract is null externalCompany: {}", externalCompany);
+              //TODO log
             }
             CompanyDto companyDto = new CompanyDto();
-            companyDto.setCredit(statementDto.getCredit());
             companyDto.setExternalCompanyId(externalCompany.getCompanyId());
+            companyDto.setCompanyName(externalCompany.getCompanyName());
             companyDto.setManagers(
                 contract.getSupportManager() + " " + contract.getCurrentSalesManager());
-            Pattern pattern = Pattern
-                .compile("(?<=.)*[\\d]{4}(?=\\bот\\b)",
-                    Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-            Matcher matcher = pattern.matcher(statementDto.getPaymentDetails());
-            if (matcher.find()) {
-              companyDto.setPaymentNumber(matcher.group());
-            } else {
-              log.error("can't extract contractNumber paymentDetails: {}",
-                  statementDto.getPaymentDetails());
+            companyDto.setCredit(statementDto.getCredit());
+            String paymentNumber = extractPaymentNumber(statementDto.getPaymentDetails());
+            if (paymentNumber == null) {
+              //TODO log
             }
-            companyDto.setCompanyName(externalCompany.getCompanyName());
+            companyDto.setPaymentNumber(paymentNumber);
             boolean innMatched = statementDto.getInn().equals(externalCompany.getInn().toString());
+            if (!innMatched) {
+              //TODO log
+            }
             companyService.update(companyDto);
             statementDto.setSyncState(SyncState.SYNC_SUCCESS);
             statementService.update(statementDto);
