@@ -29,6 +29,7 @@ public class CompanyService extends AbstractCrudService<CompanyDto, CompanyEntit
   @Transactional
   public CompanyDto update(CompanyDto companyDto) {
     CompanyEntity companyEntity = companyRepository.findByCompanyName(companyDto.getCompanyName());
+    beanMapper.updateEntityWithDto(companyDto, companyEntity);
     return super.update(beanMapper.mapToDto(companyEntity));
   }
 

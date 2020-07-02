@@ -12,11 +12,12 @@ public class CompanyMapper implements BeanMapper<CompanyDto, CompanyEntity> {
   @Override
   public CompanyEntity mapToEntity(CompanyDto dto) {
     CompanyEntity companyEntity = new CompanyEntity();
-    companyEntity.setCompanyName(dto.getCompanyName());
-    companyEntity.setCredit(dto.getCredit());
     companyEntity.setExternalCompanyId(dto.getExternalCompanyId());
+    companyEntity.setCompanyName(dto.getCompanyName());
     companyEntity.setManagers(dto.getManagers());
+    companyEntity.setCredit(dto.getCredit());
     companyEntity.setPaymentNumber(dto.getPaymentNumber());
+    companyEntity.setInnMatched(dto.isInnMatched());
     companyEntity.setId(dto.getId());
     companyEntity.setLastUpdated(dto.getLastUpdated());
     return companyEntity;
@@ -28,11 +29,12 @@ public class CompanyMapper implements BeanMapper<CompanyDto, CompanyEntity> {
       return null;
     }
     CompanyDto companyDto = new CompanyDto();
-    companyDto.setCompanyName(entity.getCompanyName());
-    companyDto.setCredit(entity.getCredit());
     companyDto.setExternalCompanyId(entity.getExternalCompanyId());
+    companyDto.setCompanyName(entity.getCompanyName());
     companyDto.setManagers(entity.getManagers());
+    companyDto.setCredit(entity.getCredit());
     companyDto.setPaymentNumber(entity.getPaymentNumber());
+    companyDto.setInnMatched(entity.isInnMatched());
     companyDto.setId(entity.getId());
     companyDto.setLastUpdated(entity.getLastUpdated());
     return companyDto;
@@ -40,12 +42,11 @@ public class CompanyMapper implements BeanMapper<CompanyDto, CompanyEntity> {
 
   @Override
   public CompanyEntity updateEntityWithDto(CompanyDto dto, CompanyEntity entity) {
-    CompanyEntity companyEntity = new CompanyEntity();
-    companyEntity.setCompanyName(dto.getCompanyName());
-    companyEntity.setCredit(dto.getCredit());
-    companyEntity.setExternalCompanyId(dto.getExternalCompanyId());
-    companyEntity.setManagers(dto.getManagers());
-    companyEntity.setPaymentNumber(dto.getPaymentNumber());
-    return companyEntity;
+    entity.setExternalCompanyId(dto.getExternalCompanyId());
+    entity.setCompanyName(dto.getCompanyName());
+    entity.setManagers(dto.getManagers());
+    entity.setCredit(dto.getCredit());
+    entity.setPaymentNumber(dto.getPaymentNumber());
+    return entity;
   }
 }

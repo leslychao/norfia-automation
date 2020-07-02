@@ -12,15 +12,15 @@ public class StatementMapper implements BeanMapper<StatementDto, StatementEntity
   @Override
   public StatementEntity mapToEntity(StatementDto dto) {
     StatementEntity statementEntity = new StatementEntity();
-    statementEntity.setId(dto.getId());
     statementEntity.setCredit(dto.getCredit());
-    statementEntity.setInn(dto.getInn());
     statementEntity.setName(dto.getName());
     statementEntity.setShortName(dto.getShortName());
+    statementEntity.setInn(dto.getInn());
     statementEntity.setPaymentDetails(dto.getPaymentDetails());
-    statementEntity.setLastUpdated(dto.getLastUpdated());
     statementEntity.setPackId(dto.getPackId());
     statementEntity.setSyncState(dto.getSyncState());
+    statementEntity.setId(dto.getId());
+    statementEntity.setLastUpdated(dto.getLastUpdated());
     return statementEntity;
   }
 
@@ -30,25 +30,25 @@ public class StatementMapper implements BeanMapper<StatementDto, StatementEntity
       return null;
     }
     StatementDto statementDto = new StatementDto();
-    statementDto.setId(entity.getId());
     statementDto.setCredit(entity.getCredit());
-    statementDto.setInn(entity.getInn());
     statementDto.setName(entity.getName());
     statementDto.setShortName(entity.getShortName());
+    statementDto.setInn(entity.getInn());
     statementDto.setPaymentDetails(entity.getPaymentDetails());
-    statementDto.setLastUpdated(entity.getLastUpdated());
     statementDto.setPackId(entity.getPackId());
     statementDto.setSyncState(entity.getSyncState());
+    statementDto.setId(entity.getId());
+    statementDto.setLastUpdated(entity.getLastUpdated());
     return statementDto;
   }
 
   @Override
   public StatementEntity updateEntityWithDto(StatementDto dto, StatementEntity entity) {
-    entity.setName(dto.getName());
     entity.setCredit(dto.getCredit());
-    entity.setPaymentDetails(dto.getPaymentDetails());
-    entity.setSyncState(dto.getSyncState());
+    entity.setName(dto.getName());
     entity.setShortName(dto.getShortName());
+    entity.setInn(dto.getInn());
+    entity.setPaymentDetails(dto.getPaymentDetails());
     return entity;
   }
 }

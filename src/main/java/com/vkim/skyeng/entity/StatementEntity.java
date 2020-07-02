@@ -18,7 +18,7 @@ import lombok.Setter;
     @Index(name = "statements_idx_01", columnList = "id", unique = true),
     @Index(name = "statements_idx_02", columnList = "syncState"),
     @Index(name = "statements_idx_03", columnList = "shortName", unique = true),
-    @Index(name = "statements_idx_05", columnList = "packId")
+    @Index(name = "statements_idx_04", columnList = "packId")
 })
 @Getter
 @Setter

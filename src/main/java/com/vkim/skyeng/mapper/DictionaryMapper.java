@@ -12,11 +12,12 @@ public class DictionaryMapper implements BeanMapper<DictionaryDto, DictionaryEnt
   @Override
   public DictionaryEntity mapToEntity(DictionaryDto dto) {
     DictionaryEntity dictionaryEntity = new DictionaryEntity();
+    dictionaryEntity.setModule(dto.getModule());
+    dictionaryEntity.setDictionaryType(dto.getDictionaryType());
+    dictionaryEntity.setDictionaryKey(dto.getDictionaryKey());
+    dictionaryEntity.setDictionaryValue(dto.getDictionaryValue());
     dictionaryEntity.setId(dto.getId());
     dictionaryEntity.setLastUpdated(dto.getLastUpdated());
-    dictionaryEntity.setKey(dto.getKey());
-    dictionaryEntity.setValue(dto.getValue());
-    dictionaryEntity.setDictionary(dto.getDictionary());
     return dictionaryEntity;
   }
 
@@ -26,19 +27,21 @@ public class DictionaryMapper implements BeanMapper<DictionaryDto, DictionaryEnt
       return null;
     }
     DictionaryDto dictionaryDto = new DictionaryDto();
+    dictionaryDto.setModule(entity.getModule());
+    dictionaryDto.setDictionaryType(entity.getDictionaryType());
+    dictionaryDto.setDictionaryKey(entity.getDictionaryKey());
+    dictionaryDto.setDictionaryValue(entity.getDictionaryValue());
     dictionaryDto.setId(entity.getId());
     dictionaryDto.setLastUpdated(entity.getLastUpdated());
-    dictionaryDto.setKey(entity.getKey());
-    dictionaryDto.setValue(entity.getValue());
-    dictionaryDto.setDictionary(entity.getDictionary());
     return dictionaryDto;
   }
 
   @Override
   public DictionaryEntity updateEntityWithDto(DictionaryDto dto, DictionaryEntity entity) {
-    entity.setDictionary(dto.getDictionary());
-    entity.setKey(dto.getKey());
-    entity.setValue(dto.getValue());
+    entity.setModule(dto.getModule());
+    entity.setDictionaryType(dto.getDictionaryType());
+    entity.setDictionaryKey(dto.getDictionaryKey());
+    entity.setDictionaryValue(dto.getDictionaryValue());
     return entity;
   }
 }

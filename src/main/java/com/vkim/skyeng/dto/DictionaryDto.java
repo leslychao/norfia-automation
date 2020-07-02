@@ -1,5 +1,6 @@
 package com.vkim.skyeng.dto;
 
+import com.vkim.skyeng.DictionaryType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +10,8 @@ import lombok.ToString;
 @ToString
 public class DictionaryDto extends BaseDto {
 
-  private String dictionary;
-  private String key;
-  private String value;
+  private String module;
+  private DictionaryType dictionaryType;
+  private String dictionaryKey;
+  private String dictionaryValue;
 }

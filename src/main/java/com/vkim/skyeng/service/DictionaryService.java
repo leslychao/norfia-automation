@@ -2,6 +2,7 @@ package com.vkim.skyeng.service;
 
 import static java.util.stream.Collectors.toList;
 
+import com.vkim.skyeng.DictionaryType;
 import com.vkim.skyeng.dto.DictionaryDto;
 import com.vkim.skyeng.entity.DictionaryEntity;
 import com.vkim.skyeng.mapper.BeanMapper;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -30,8 +32,9 @@ public class DictionaryService extends AbstractCrudService<DictionaryDto, Dictio
     this.dictionaryRepository = dictionaryRepository;
   }
 
-  public List<DictionaryDto> findByDictionaryAndKey(String dictionary, String key) {
-    return dictionaryRepository.findByDictionaryAndKeyOrderByIdAsc(dictionary, key)
+  @Transactional(readOnly = true)
+  public List<DictionaryDto> findByDictionaryType(DictionaryType dictionaryType) {
+    return dictionaryRepository.findByDictionaryTypeOrderByIdAsc(dictionaryType.toString())
         .stream()
         .map(beanMapper::mapToDto)
         .collect(toList());
@@ -47,11 +50,10 @@ public class DictionaryService extends AbstractCrudService<DictionaryDto, Dictio
   }
 
   public String extractCompanyShortName(String companyName) {
-    List<DictionaryDto> dictionaries = findByDictionaryAndKey("dictionary_organization",
-        "name_regex");
+    List<DictionaryDto> dictionaries = findByDictionaryType(DictionaryType.LEGAL_PERSONS);
     return dictionaries
         .stream()
-        .filter(dictionaryDto -> contains(dictionaryDto.getValue(), companyName))
+        .filter(dictionaryDto -> contains(dictionaryDto.getDictionaryValue(), companyName))
         .findAny()
         .map(dictionaryDto -> {
           Pattern pattern = Pattern.compile("(?<=\")[^\"]+(?=\")");
