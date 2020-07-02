@@ -14,6 +14,5 @@ public class CompanyDto extends BaseDto {
   private String managers;
   private String credit;
   private String paymentNumber;
-  private boolean innMatched;
 
 }

@@ -37,10 +37,11 @@ public class SkyEngIntegrationService {
 
   @Getter
   @Setter
-  @EqualsAndHashCode
+  @EqualsAndHashCode(onlyExplicitlyIncluded = true)
   @ToString
   public static class ExternalCompany {
 
+    @EqualsAndHashCode.Include
     private Long companyId;
     private String companyName;
     private String paymentType;
@@ -284,15 +285,17 @@ public class SkyEngIntegrationService {
             companyDto.setManagers(
                 contract.getSupportManager() + " " + contract.getCurrentSalesManager());
             Pattern pattern = Pattern
-                .compile("(?<=.)*[\\d]{4}\\b(?=\\s*от\\s*)",
+                .compile("(?<=.)*[\\d]{4}(?=\\bот\\b)",
                     Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
             Matcher matcher = pattern.matcher(statementDto.getPaymentDetails());
             if (matcher.find()) {
               companyDto.setPaymentNumber(matcher.group());
+            } else {
+              log.error("can't extract contractNumber paymentDetails: {}",
+                  statementDto.getPaymentDetails());
             }
             companyDto.setCompanyName(externalCompany.getCompanyName());
-            companyDto
-                .setInnMatched(statementDto.getInn().equals(externalCompany.getInn().toString()));
+            boolean innMatched = statementDto.getInn().equals(externalCompany.getInn().toString());
             companyService.update(companyDto);
             statementDto.setSyncState(SyncState.SYNC_SUCCESS);
             statementService.update(statementDto);

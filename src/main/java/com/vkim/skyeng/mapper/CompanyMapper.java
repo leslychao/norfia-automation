@@ -17,7 +17,6 @@ public class CompanyMapper implements BeanMapper<CompanyDto, CompanyEntity> {
     companyEntity.setManagers(dto.getManagers());
     companyEntity.setCredit(dto.getCredit());
     companyEntity.setPaymentNumber(dto.getPaymentNumber());
-    companyEntity.setInnMatched(dto.isInnMatched());
     companyEntity.setId(dto.getId());
     companyEntity.setLastUpdated(dto.getLastUpdated());
     return companyEntity;
@@ -34,7 +33,6 @@ public class CompanyMapper implements BeanMapper<CompanyDto, CompanyEntity> {
     companyDto.setManagers(entity.getManagers());
     companyDto.setCredit(entity.getCredit());
     companyDto.setPaymentNumber(entity.getPaymentNumber());
-    companyDto.setInnMatched(entity.isInnMatched());
     companyDto.setId(entity.getId());
     companyDto.setLastUpdated(entity.getLastUpdated());
     return companyDto;

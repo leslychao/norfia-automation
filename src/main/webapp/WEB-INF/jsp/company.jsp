@@ -186,7 +186,6 @@
 									<th scope="col">Манагеры</th>
 									<th scope="col">Кредит</th>
 									<th scope="col">Номер Платежа</th>
-									<th scope="col">Инн Совпадают</th>
 									<th scope="col">Последнее обновление</th>
 								</tr>
 							</thead>
@@ -197,7 +196,6 @@
 										<td>${company.companyName}</td>
 										<td>${company.managers}</td>
 										<td>${company.credit}</td>
-										<td>${company.innMatched}</td>
 										<td>${company.paymentNumber}</td>
 										<td>${localDateTimeFormatter.format(company.lastUpdated)}</td>
 									</tr>

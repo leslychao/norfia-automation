@@ -28,6 +28,5 @@ public class CompanyEntity extends BaseEntity {
   private String managers;
   private String credit;
   private String paymentNumber;
-  private boolean innMatched;
 
 }
