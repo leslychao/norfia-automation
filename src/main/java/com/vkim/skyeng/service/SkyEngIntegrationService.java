@@ -110,6 +110,7 @@ public class SkyEngIntegrationService {
   }
 
   private CompanyService companyService;
+
   private StatementService statementService;
 
   @Autowired
@@ -283,7 +284,7 @@ public class SkyEngIntegrationService {
             companyDto.setManagers(
                 contract.getSupportManager() + " " + contract.getCurrentSalesManager());
             Pattern pattern = Pattern
-                .compile("(?<=.)*[\\d]{4}(?=\\bот\\b)+",
+                .compile("(?<=.)*[\\d]{4}\\b(?=\\s*от\\s*)",
                     Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
             Matcher matcher = pattern.matcher(statementDto.getPaymentDetails());
             if (matcher.find()) {
@@ -291,7 +292,7 @@ public class SkyEngIntegrationService {
             }
             companyDto.setCompanyName(externalCompany.getCompanyName());
             companyDto.setInnMatched(statementDto.getInn().equals(externalCompany.getInn()));
-            companyService.save(companyDto);
+            companyService.update(companyDto);
             statementDto.setSyncState(SyncState.SYNC_SUCCESS);
             statementService.update(statementDto);
           });

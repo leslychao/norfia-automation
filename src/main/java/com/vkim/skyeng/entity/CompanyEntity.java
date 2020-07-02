@@ -1,6 +1,7 @@
 package com.vkim.skyeng.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "companies")
+@Table(name = "companies", indexes = {
+    @Index(name = "companies_idx_01", columnList = "id", unique = true),
+    @Index(name = "companies_idx_02", columnList = "companyName", unique = true)
+})
 @Getter
 @Setter
 @NoArgsConstructor

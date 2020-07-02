@@ -4,6 +4,7 @@ import com.vkim.skyeng.SyncState;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Index;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "statements")
+@Table(name = "statements", indexes = {
+    @Index(name = "statements_idx_01", columnList = "id", unique = true),
+    @Index(name = "statements_idx_02", columnList = "syncState"),
+    @Index(name = "statements_idx_03", columnList = "shortName", unique = true),
+    @Index(name = "statements_idx_05", columnList = "packId")
+})
 @Getter
 @Setter
 @NoArgsConstructor
