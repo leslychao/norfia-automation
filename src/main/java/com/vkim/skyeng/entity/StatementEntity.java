@@ -36,4 +36,5 @@ public class StatementEntity extends BaseEntity {
   private String packId;
   @Enumerated(EnumType.STRING)
   private SyncState syncState;
+  private String log;
 }

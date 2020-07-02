@@ -38,6 +38,11 @@ public class HomeController {
     AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
     model.addAttribute("statements", statementService.findByPackId(appConfigDto.getPackId()));
     model.addAttribute("localDateTimeFormatter", DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+    if (appConfigDto.isShowEditStatementModal()) {
+      model
+          .addAttribute("statementForEdit",
+              statementService.get(appConfigDto.getEditStatementId()));
+    }
     return "home";
   }
 
@@ -87,10 +92,19 @@ public class HomeController {
     return new RedirectView("/home/dictionary");
   }
 
-  @RequestMapping(value = {"/home/syncCompanies"}, method = RequestMethod.GET)
+  @RequestMapping(value = {"/home/syncCompanies/"}, method = RequestMethod.GET)
   public RedirectView syncCompanies(Model model, HttpSession session) {
     AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
     skyEngIntegrationService.syncCompanies(appConfigDto);
     return new RedirectView("/company");
   }
+
+  @RequestMapping(value = {"/home/editStatement"}, method = RequestMethod.GET)
+  public RedirectView editStatement(@RequestParam("id") Long id, HttpSession session) {
+    AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
+    appConfigDto.setShowEditStatementModal(true);
+    appConfigDto.setEditStatementId(id);
+    return new RedirectView("/home");
+  }
+
 }

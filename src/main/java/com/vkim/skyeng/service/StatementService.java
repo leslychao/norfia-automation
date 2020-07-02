@@ -69,34 +69,25 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
     } catch (InvalidFormatException | IOException e) {
       throw new RuntimeException(e);
     }
-    return persistStatementsIntoDb(listStatements(sheetData, appConfigDto.getPackId()));
+    return persistStatementsIntoDb(listStatementsFromXls(sheetData, appConfigDto.getPackId()));
   }
 
-  public List<StatementDto> persistStatementsIntoDb(List<StatementDto> statementsFromXls) {
-    if (statementsFromXls.isEmpty()) {
+  public List<StatementDto> persistStatementsIntoDb(List<StatementDto> statements) {
+    if (statements.isEmpty()) {
       return Collections.EMPTY_LIST;
     }
-    return statementsFromXls
+    return statements
         .stream()
         .map(statementDto -> save(statementDto))
         .collect(toList());
   }
 
-  private List<StatementDto> listStatements(SheetData sheetData, String packId) {
+  private List<StatementDto> listStatementsFromXls(SheetData sheetData, String packId) {
     return ofNullable(sheetData.getData())
         .orElse(emptyList())
         .stream()
         .map(stringStringMap -> toStatementDto(stringStringMap, packId))
         .collect(toList());
-  }
-
-  private void setShortName(StatementDto statementDto) {
-    String companyName = statementDto.getName();
-    String shortName = dictionaryService.extractCompanyShortName(companyName);
-    statementDto.setShortName(shortName);
-    if (shortName == null) {
-      statementDto.setSyncState(SyncState.NOT_SEND);
-    }
   }
 
   private StatementDto toStatementDto(Map<String, String> statementXls, String packId) {
@@ -112,8 +103,28 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
     statementDto.setPaymentDetails(paymentDetails);
     statementDto.setPackId(packId);
     statementDto.setSyncState(SyncState.READY_TO_SEND);
-    setShortName(statementDto);
     return statementDto;
+  }
+
+  private void setShortName(StatementEntity entity) {
+    String shortName = dictionaryService.extractCompanyShortName(entity.getName());
+    if (shortName == null) {
+      entity.setSyncState(SyncState.NOT_SEND);
+    } else {
+      entity.setShortName(shortName);
+    }
+  }
+
+  @Override
+  protected StatementEntity entityPreSaveAction(StatementEntity entity) {
+    setShortName(entity);
+    return super.entityPreSaveAction(entity);
+  }
+
+  @Override
+  protected StatementEntity entityPreUpdateAction(StatementEntity entity) {
+    setShortName(entity);
+    return super.entityPreUpdateAction(entity);
   }
 
   @Override

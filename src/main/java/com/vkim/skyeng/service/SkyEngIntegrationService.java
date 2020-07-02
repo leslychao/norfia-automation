@@ -279,34 +279,39 @@ public class SkyEngIntegrationService {
                       .mapping(externalCompany -> getContract(externalCompany.getContractId()),
                           Collectors.collectingAndThen(Collectors.maxBy(Contract::compareTo),
                               Optional::get))));
+          StringBuilder stringBuilder = new StringBuilder();
           if (companyContractMap.size() != 1) {
-            log.error("company not found with name: {}", statementDto.getName());
+            stringBuilder.append("- company not found \n");
+            statementDto.setLog(stringBuilder.toString());
             statementDto.setSyncState(SyncState.SYNC_FAILED);
             statementService.update(statementDto);
             return;
           }
           companyContractMap.forEach((externalCompany, contract) -> {
             if (contract.getId() == null) {
-              //TODO log
+              stringBuilder.append("- contract id is empty \n");
             }
             CompanyDto companyDto = new CompanyDto();
             companyDto.setExternalCompanyId(externalCompany.getCompanyId());
-            companyDto.setCompanyName(externalCompany.getCompanyName());
+            companyDto.setCompanyName(statementDto.getShortName());
             companyDto.setManagers(
                 contract.getSupportManager() + " " + contract.getCurrentSalesManager());
             companyDto.setCredit(statementDto.getCredit());
             String paymentNumber = extractPaymentNumber(statementDto.getPaymentDetails());
             if (paymentNumber == null) {
-              //TODO log
+              stringBuilder.append("- can't extract payment number \n");
             }
             companyDto.setPaymentNumber(paymentNumber);
             boolean innMatched = statementDto.getInn().equals(externalCompany.getInn().toString());
             if (!innMatched) {
-              //TODO log
+              stringBuilder.append("- inn not matched \n");
             }
-            companyService.update(companyDto);
+            if (stringBuilder.length() != 0) {
+              statementDto.setLog(stringBuilder.toString());
+            }
             statementDto.setSyncState(SyncState.SYNC_SUCCESS);
             statementService.update(statementDto);
+            companyService.update(companyDto);
           });
         });
   }

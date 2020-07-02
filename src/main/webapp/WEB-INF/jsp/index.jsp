@@ -181,6 +181,7 @@
 						<table class="table table-bordered">
 							<thead>
 								<tr>
+									<th scope="col">Оповещения</th>
 									<th scope="col">Кредит</th>
 									<th scope="col">Наименование</th>
 									<th scope="col">Краткое Наименование</th>
@@ -188,18 +189,52 @@
 									<th scope="col">ИНН</th>
 									<th scope="col">Назначение платежа</th>
 									<th scope="col">Последнее обновление</th>
+									<th>Edit</th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach items="${statements}" var="statement">
-									<tr>
-										<td>${statement.credit}</td>
-										<td>${statement.name}</td>
-										<td>${statement.shortName}</td>
-										<td>${statement.syncState}</td>
-										<td>${statement.inn}</td>
-										<td>${statement.paymentDetails}</td>
-										<td>${localDateTimeFormatter.format(statement.lastUpdated)}</td>
+									<c:choose>
+										<c:when test="${statement.syncState eq 'SYNC_SUCCESS'}">
+											<tr class="table-success">
+										</c:when>
+										<c:when test="${statement.syncState eq 'SYNC_FAILED'}">
+											<tr class="table-danger">
+										</c:when>
+										<c:otherwise>
+											<tr class="table-light">
+										</c:otherwise>
+									</c:choose>
+									<td><c:choose>
+											<c:when test="${not empty statement.log}">
+												<span class="d-inline-block" tabindex="0"
+													data-toggle="tooltip" title="${statement.log}"> <svg
+														width="1em" height="1em" viewBox="0 0 16 16"
+														class="bi bi-chat-dots" fill="currentColor"
+														xmlns="http://www.w3.org/2000/svg">
+														  <path fill-rule="evenodd"
+															d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z" />
+														  <path
+															d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+														</svg>
+												</span>
+											</c:when>
+										</c:choose></td>
+									<td>${statement.credit}</td>
+									<td>${statement.name}</td>
+									<td>${statement.shortName}</td>
+									<td>${statement.syncState}</td>
+									<td>${statement.inn}</td>
+									<td>${statement.paymentDetails}</td>
+									<td>${localDateTimeFormatter.format(statement.lastUpdated)}</td>
+									<td>
+										<p data-placement="top" data-toggle="tooltip" title="Edit">
+											<a class="btn btn-primary btn-xs"
+												href="/home/editStatement?id=${statement.id}"> <span
+												class="glyphicon glyphicon-pencil"></span>
+											</a>
+										</p>
+									</td>
 									</tr>
 								</c:forEach>
 							</tbody>
