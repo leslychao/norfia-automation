@@ -291,6 +291,8 @@
 							<tr>
 								<th scope="col">Кредит</th>
 								<th scope="col">Наименование</th>
+								<th scope="col">Краткое Наименование</th>
+								<th scope="col">Статус Синхронизации</th>
 								<th scope="col">ИНН</th>
 								<th scope="col">Назначение платежа</th>
 								<th scope="col">Последнее обновление</th>
@@ -301,6 +303,8 @@
 								<tr>
 									<td>${statement.credit}</td>
 									<td>${statement.name}</td>
+									<td>${statement.shortName}</td>
+									<td>${statement.syncState}</td>
 									<td>${statement.inn}</td>
 									<td>${statement.paymentDetails}</td>
 									<td>${localDateTimeFormatter.format(statement.lastUpdated)}</td>

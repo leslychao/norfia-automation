@@ -1,5 +1,6 @@
 package com.vkim.skyeng.service;
 
+import com.vkim.skyeng.SyncState;
 import com.vkim.skyeng.dto.AppConfigDto;
 import com.vkim.skyeng.dto.CompanyDto;
 import com.vkim.skyeng.dto.StatementDto;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -167,11 +170,15 @@ public class SkyEngIntegrationService {
       ExternalCompany externalCompany = new ExternalCompany();
       externalCompany.setCompanyId(jsonArray.getJSONObject(i).getLong("companyId"));
       externalCompany.setCompanyName(jsonArray.getJSONObject(i).getString("companyName"));
-      externalCompany.setPaymentType(jsonArray.getJSONObject(i).getString("paymentType"));
+      if (!jsonArray.getJSONObject(i).isNull("paymentType")) {
+        externalCompany.setPaymentType(jsonArray.getJSONObject(i).getString("paymentType"));
+      }
       externalCompany.setDealId(jsonArray.getJSONObject(i).getLong("dealId"));
-      externalCompany.setContractId(jsonArray.getJSONObject(i).getLong("contractId"));
+      if (!jsonArray.getJSONObject(i).isNull("contractId")) {
+        externalCompany.setContractId(jsonArray.getJSONObject(i).getLong("contractId"));
+      }
       setInn(externalCompany);
-      if (!externalCompany.getPaymentType().equals("special_offer")) {
+      if (!"special_offer".equals(externalCompany.getPaymentType())) {
         companies.add(externalCompany);
       }
     }
@@ -179,6 +186,9 @@ public class SkyEngIntegrationService {
   }
 
   public static Contract getContract(Long id) {
+    if (id == null) {
+      return new Contract();
+    }
     String contractStringEntity;
     try {
       contractStringEntity = doGet(new URIBuilder(
@@ -201,9 +211,12 @@ public class SkyEngIntegrationService {
       currentSalesManager.setName(
           jsonObject.getJSONObject("data").getJSONObject("currentSalesManager")
               .getJSONObject("general").getString("name"));
-      currentSalesManager.setSurname(
-          jsonObject.getJSONObject("data").getJSONObject("currentSalesManager")
-              .getJSONObject("general").getString("surname"));
+      if (!jsonObject.getJSONObject("data").getJSONObject("currentSalesManager")
+          .getJSONObject("general").isNull("surname")) {
+        currentSalesManager.setSurname(
+            jsonObject.getJSONObject("data").getJSONObject("currentSalesManager")
+                .getJSONObject("general").getString("surname"));
+      }
       currentSalesManager.setManagerType(ManagerType.KAM);
       contract.setCurrentSalesManager(currentSalesManager);
     }
@@ -229,9 +242,13 @@ public class SkyEngIntegrationService {
       supportManager.setName(
           jsonObject.getJSONObject("data").getJSONObject("supportManager").getJSONObject("general")
               .getString("name"));
-      supportManager.setSurname(
-          jsonObject.getJSONObject("data").getJSONObject("supportManager").getJSONObject("general")
-              .getString("surname"));
+      if (!jsonObject.getJSONObject("data").getJSONObject("supportManager").getJSONObject("general")
+          .isNull("surname")) {
+        supportManager.setSurname(
+            jsonObject.getJSONObject("data").getJSONObject("supportManager")
+                .getJSONObject("general")
+                .getString("surname"));
+      }
       supportManager.setManagerType(ManagerType.KAM);
       contract.setSupportManager(supportManager);
     }
@@ -240,18 +257,44 @@ public class SkyEngIntegrationService {
 
   public void syncCompanies(AppConfigDto appConfigDto) {
     List<StatementDto> statements = statementService.findByPackId(appConfigDto.getPackId());
-    statements.forEach(statementDto -> {
-      List<ExternalCompany> externalCompanies = getCompanies(statementDto.getName());
-      boolean innMatched = externalCompanies.stream()
-          .allMatch(externalCompany -> externalCompany.getInn().equals(statementDto.getInn()));
-      Map<String, Contract> companyContractMap = externalCompanies.stream()
-          .collect(Collectors.groupingBy(ExternalCompany::getCompanyName,
-              Collectors.mapping(externalCompany -> getContract(externalCompany.getContractId()),
-                  Collectors.collectingAndThen(Collectors.maxBy(Contract::compareTo),
-                      Optional::get))));
-
-      CompanyDto companyDto = new CompanyDto();
-
-    });
+    statements.stream()
+        .filter(statementDto -> SyncState.READY_TO_SEND == statementDto.getSyncState())
+        .forEach(statementDto -> {
+          List<ExternalCompany> externalCompanies = getCompanies(statementDto.getShortName());
+          Map<ExternalCompany, Contract> companyContractMap = externalCompanies.stream()
+              .collect(Collectors.groupingBy(externalCompany -> externalCompany,
+                  Collectors
+                      .mapping(externalCompany -> getContract(externalCompany.getContractId()),
+                          Collectors.collectingAndThen(Collectors.maxBy(Contract::compareTo),
+                              Optional::get))));
+          if (companyContractMap.size() != 1) {
+            log.error("company not found with name: {}", statementDto.getName());
+            statementDto.setSyncState(SyncState.SYNC_FAILED);
+            statementService.update(statementDto);
+            return;
+          }
+          companyContractMap.forEach((externalCompany, contract) -> {
+            if (contract.getId() == null) {
+              log.error("contract is null externalCompany: {}", externalCompany);
+            }
+            CompanyDto companyDto = new CompanyDto();
+            companyDto.setCredit(statementDto.getCredit());
+            companyDto.setExternalCompanyId(externalCompany.getCompanyId());
+            companyDto.setManagers(
+                contract.getSupportManager() + " " + contract.getCurrentSalesManager());
+            Pattern pattern = Pattern
+                .compile("(?<=.)*[\\d]{4}(?=\\bот\\b)+",
+                    Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+            Matcher matcher = pattern.matcher(statementDto.getPaymentDetails());
+            if (matcher.find()) {
+              companyDto.setPaymentNumber(matcher.group());
+            }
+            companyDto.setCompanyName(externalCompany.getCompanyName());
+            companyDto.setInnMatched(statementDto.getInn().equals(externalCompany.getInn()));
+            companyService.save(companyDto);
+            statementDto.setSyncState(SyncState.SYNC_SUCCESS);
+            statementService.update(statementDto);
+          });
+        });
   }
 }

@@ -29,4 +29,5 @@ public class CompanyController {
     model.addAttribute("localDateTimeFormatter", DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     return "company";
   }
+
 }

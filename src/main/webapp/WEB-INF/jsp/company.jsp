@@ -36,7 +36,7 @@
 	<div class="row">
 		<div class="mt-5 mx-auto">
 			<c:choose>
-				<c:when test="${empty statements}">
+				<c:when test="${empty companies}">
 					<svg
 						height="20em"
 						width="20em"

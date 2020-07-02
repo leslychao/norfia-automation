@@ -3,6 +3,7 @@ package com.vkim.skyeng.controller;
 import com.vkim.skyeng.dto.AppConfigDto;
 import com.vkim.skyeng.dto.DictionaryDto;
 import com.vkim.skyeng.service.DictionaryService;
+import com.vkim.skyeng.service.SkyEngIntegrationService;
 import com.vkim.skyeng.service.StatementService;
 import java.time.format.DateTimeFormatter;
 import javax.servlet.http.HttpSession;
@@ -22,12 +23,14 @@ public class HomeController {
 
   private StatementService statementService;
   private DictionaryService dictionaryService;
+  private SkyEngIntegrationService skyEngIntegrationService;
 
   @Autowired
   public HomeController(StatementService statementService,
-      DictionaryService dictionaryService) {
+      DictionaryService dictionaryService, SkyEngIntegrationService skyEngIntegrationService) {
     this.statementService = statementService;
     this.dictionaryService = dictionaryService;
+    this.skyEngIntegrationService = skyEngIntegrationService;
   }
 
   @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
@@ -82,5 +85,12 @@ public class HomeController {
     log.info("remove dictionary with id {}", id);
     dictionaryService.delete(id);
     return new RedirectView("/home/dictionary");
+  }
+
+  @RequestMapping(value = {"/home/syncCompanies"}, method = RequestMethod.GET)
+  public RedirectView syncCompanies(Model model, HttpSession session) {
+    AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
+    skyEngIntegrationService.syncCompanies(appConfigDto);
+    return new RedirectView("/company");
   }
 }

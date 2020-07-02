@@ -2,7 +2,6 @@ package com.vkim.skyeng.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +26,5 @@ public class BaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
   private Long id;
 
-  @Column(name = "last_updated")
   private LocalDateTime lastUpdated;
 }

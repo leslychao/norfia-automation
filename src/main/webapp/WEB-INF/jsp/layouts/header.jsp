@@ -30,7 +30,7 @@
 		<c:choose>
 			<c:when test="${sessionScope.app_config.lastUrl eq '/home'}">
 				<div class="mx-auto order-0">
-					<a class="navbar-brand mx-auto" href="#">Запустить интеграцию</a>
+					<a class="navbar-brand mx-auto" href="/home/syncCompanies">Запустить интеграцию</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse"
 						data-target=".dual-collapse2">
 						<span class="navbar-toggler-icon"></span>
