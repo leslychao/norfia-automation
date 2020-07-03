@@ -102,8 +102,11 @@ public class HomeController {
   }
 
   @RequestMapping(value = {"/home/saveStatement"}, method = RequestMethod.POST)
-  public RedirectView saveStatement(@ModelAttribute StatementDto statementDto) {
+  public RedirectView saveStatement(@ModelAttribute StatementDto statementDto,
+      HttpSession session) {
     statementService.update(statementDto);
+    AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
+    appConfigDto.setSectionToScroll(statementDto.getId());
     return new RedirectView("/home");
   }
 

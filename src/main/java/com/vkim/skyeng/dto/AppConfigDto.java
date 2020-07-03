@@ -22,4 +22,5 @@ public class AppConfigDto extends BaseDto {
   private String lastUrl;
   @NonNull
   private String packId;
+  private long sectionToScroll;
 }

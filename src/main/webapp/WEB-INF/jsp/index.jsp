@@ -8,6 +8,10 @@
 		if ("${sessionScope.app_config.skyengCookie}".length == 0) {
 			$('#skyengCookieModal').modal('show');
 		}
+		$('html, body').animate(
+				{
+					scrollTop : $("#${sessionScope.app_config.sectionToScroll}").offset().top
+				}, 1500);
 	}
 </script>
 </head>
@@ -217,7 +221,8 @@
 											table-light
 										</c:otherwise>
 									</c:choose>
-									">
+									"
+										id="${statement.id}">
 										<td>
 											<p data-placement="top" data-toggle="tooltip" title="Edit">
 												<a href="/home/editStatement?id=${statement.id}"> <svg
