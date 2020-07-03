@@ -40,7 +40,7 @@
 		</c:choose>
 		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+				<li class="nav-item"><a class="nav-link" href="https://vk.com/vitalii_kim">Support</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Sign up</a></li>
 			</ul>
 		</div>

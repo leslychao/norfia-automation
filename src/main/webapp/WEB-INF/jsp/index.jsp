@@ -8,10 +8,13 @@
 		if ("${sessionScope.app_config.skyengCookie}".length == 0) {
 			$('#skyengCookieModal').modal('show');
 		}
-		$('html, body').animate(
-				{
-					scrollTop : $("#${sessionScope.app_config.sectionToScroll}").offset().top
-				}, 1500);
+		$('html, body')
+				.animate(
+						{
+							scrollTop : $(
+									"#${sessionScope.app_config.sectionToScroll}")
+									.offset().top
+						}, 1500);
 	}
 </script>
 </head>
