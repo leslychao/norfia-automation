@@ -1,6 +1,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <head>
 <script language="javascript">
 	document.body.onload = function() {
@@ -186,6 +187,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="mt-5 mx-auto col-12 col-sm-10 col-md-10 col-lg-10">
+						<h4>Total:${fn:length(statements)}</h4>
 						<table
 							class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg">
 							<thead>
