@@ -28,7 +28,8 @@ public class CompanyService extends AbstractCrudService<CompanyDto, CompanyEntit
   @Override
   @Transactional
   public CompanyDto update(CompanyDto companyDto) {
-    CompanyEntity companyEntity = companyRepository.findByCompanyName(companyDto.getCompanyName());
+    CompanyEntity companyEntity = companyRepository
+        .findByCompanyNameOrderByIdAsc(companyDto.getCompanyName());
     if (companyEntity != null) {
       updateEntityWithDto(companyEntity, companyDto);
       return super.update(mapToDto(companyEntity));
