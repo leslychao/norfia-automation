@@ -269,7 +269,7 @@ public class SkyEngIntegrationService {
 
   private String extractPaymentNumber(String paymentDetails) {
     Pattern pattern = Pattern
-        .compile("6[\\d]{3}", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+        .compile("(?<=№)*[\\d]{3,4}", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     Matcher matcher = pattern.matcher(paymentDetails);
     if (matcher.find()) {
       return matcher.group();
