@@ -243,7 +243,7 @@ public class SkyEngIntegrationService {
       administrativeManager.setSurname(
           jsonObject.getJSONObject("data").getJSONObject("administrativeManager")
               .getJSONObject("general").getString("surname"));
-      administrativeManager.setManagerType(ManagerType.KAM);
+      administrativeManager.setManagerType(ManagerType.AM);
       contract.setAdministrativeManager(administrativeManager);
     }
     if (!jsonObject.getJSONObject("data").isNull("supportManager")) {
@@ -261,7 +261,7 @@ public class SkyEngIntegrationService {
                 .getJSONObject("general")
                 .getString("surname"));
       }
-      supportManager.setManagerType(ManagerType.KAM);
+      supportManager.setManagerType(ManagerType.MC);
       contract.setSupportManager(supportManager);
     }
     return contract;
@@ -277,11 +277,42 @@ public class SkyEngIntegrationService {
     return null;
   }
 
-  private String extractManagerTag(Contract contract, StringBuilder logStringBuilder) {
-    DictionaryDto dictionaryDto = dictionaryService
-        .findByDictionaryTypeAndDictionaryKey(DictionaryType.MANAGERS_MC,
-            contract.getSupportManager().getFullName());
-    return null;
+  private String extractSlackCounterparties(Contract contract, StringBuilder logStringBuilder) {
+    StringBuilder result = new StringBuilder();
+    Manager mcManager = contract.getSupportManager();
+    if (mcManager == null) {
+      logStringBuilder.append("- Support Manager is empty \n");
+    } else {
+      DictionaryDto dictionaryDto = dictionaryService
+          .findByDictionaryTypeAndDictionaryKey(DictionaryType.MANAGERS_MC,
+              mcManager.getFullName());
+      result.append("MC ").append(
+          dictionaryDto == null ? mcManager.getFullName() : dictionaryDto.getDictionaryValue());
+    }
+
+    Manager kamManager = contract.getCurrentSalesManager();
+    if (kamManager == null) {
+      logStringBuilder.append("- Current Sales Manager is empty \n");
+    } else {
+      DictionaryDto dictionaryDto = dictionaryService
+          .findByDictionaryTypeAndDictionaryKey(DictionaryType.MANAGERS_KAM,
+              kamManager.getFullName());
+      result.append("KAM ").append(
+          dictionaryDto == null ? kamManager.getFullName() : dictionaryDto.getDictionaryValue());
+    }
+
+    Manager amManager = contract.getAdministrativeManager();
+    if (amManager == null) {
+      logStringBuilder.append("- Administrative Manager is empty \n");
+    } else {
+      DictionaryDto dictionaryDto = dictionaryService
+          .findByDictionaryTypeAndDictionaryKey(DictionaryType.MANAGERS_KAM,
+              amManager.getFullName());
+      result.append("AM ").append(
+          dictionaryDto == null ? amManager.getFullName() : dictionaryDto.getDictionaryValue());
+    }
+
+    return result.toString();
   }
 
   public void syncCompanies(AppConfigDto appConfigDto) {
@@ -296,36 +327,36 @@ public class SkyEngIntegrationService {
                       .mapping(externalCompany -> getContract(externalCompany.getContractId()),
                           Collectors.collectingAndThen(Collectors.maxBy(Contract::compareTo),
                               Optional::get))));
-          StringBuilder stringBuilder = new StringBuilder();
+          StringBuilder logStringBuilder = new StringBuilder();
           if (companyContractMap.size() != 1) {
-            stringBuilder.append("- company not found \n");
-            statementDto.setLog(stringBuilder.toString());
+            logStringBuilder.append("- company not found \n");
+            statementDto.setLog(logStringBuilder.toString());
             statementDto.setSyncState(SyncState.SYNC_FAILED);
             statementService.update(statementDto);
             return;
           }
           companyContractMap.forEach((externalCompany, contract) -> {
             if (contract.getId() == null) {
-              stringBuilder.append("- contract id is empty \n");
+              logStringBuilder.append("- contract id is empty \n");
             }
             CompanyDto companyDto = new CompanyDto();
             companyDto.setExternalCompanyId(externalCompany.getCompanyId());
             companyDto.setCompanyName(statementDto.getShortName());
-            companyDto.setManagers(
-                contract.getSupportManager() + " " + contract.getCurrentSalesManager());
+            String slackCounterparties = extractSlackCounterparties(contract, logStringBuilder);
+            companyDto.setManagers(slackCounterparties);
             companyDto.setCredit(statementDto.getCredit());
             String paymentNumber = extractPaymentNumber(statementDto.getPaymentDetails());
             if (paymentNumber == null) {
-              stringBuilder.append("- can't extract payment number \n");
+              logStringBuilder.append("- can't extract payment number \n");
             }
             companyDto.setPaymentNumber(paymentNumber);
             boolean innMatched = StringUtils
                 .equals(statementDto.getInn(), String.valueOf(externalCompany.getInn()));
             if (!innMatched) {
-              stringBuilder.append("- inn not matched \n");
+              logStringBuilder.append("- inn not matched \n");
             }
-            if (stringBuilder.length() != 0) {
-              statementDto.setLog(stringBuilder.toString());
+            if (logStringBuilder.length() != 0) {
+              statementDto.setLog(logStringBuilder.toString());
             }
             statementDto.setSyncState(SyncState.SYNC_SUCCESS);
             statementService.update(statementDto);
