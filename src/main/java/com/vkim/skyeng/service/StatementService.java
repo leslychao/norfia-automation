@@ -24,6 +24,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -69,24 +70,25 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
     } catch (InvalidFormatException | IOException e) {
       throw new RuntimeException(e);
     }
-    return persistStatementsIntoDb(listStatementsFromXls(sheetData, appConfigDto.getPackId()));
+    return saveAll(statementsFromXls(sheetData, appConfigDto.getPackId()));
   }
 
-  public List<StatementDto> persistStatementsIntoDb(List<StatementDto> statements) {
+  private List<StatementDto> statementsFromXls(SheetData sheetData, String packId) {
+    return ofNullable(sheetData.getData())
+        .orElse(emptyList())
+        .stream()
+        .map(stringStringMap -> toStatementDto(stringStringMap, packId))
+        .collect(toList());
+  }
+
+  @Transactional
+  public List<StatementDto> saveAll(List<StatementDto> statements) {
     if (statements.isEmpty()) {
       return Collections.EMPTY_LIST;
     }
     return statements
         .stream()
         .map(statementDto -> save(statementDto))
-        .collect(toList());
-  }
-
-  private List<StatementDto> listStatementsFromXls(SheetData sheetData, String packId) {
-    return ofNullable(sheetData.getData())
-        .orElse(emptyList())
-        .stream()
-        .map(stringStringMap -> toStatementDto(stringStringMap, packId))
         .collect(toList());
   }
 
@@ -99,32 +101,22 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
     StatementDto statementDto = new StatementDto();
     statementDto.setCredit(credit);
     statementDto.setName(name);
+    setShortName(statementDto);
     statementDto.setInn(inn);
     statementDto.setPaymentDetails(paymentDetails);
     statementDto.setPackId(packId);
-    statementDto.setSyncState(SyncState.READY_TO_SEND);
+
     return statementDto;
   }
 
-  private void setShortName(StatementEntity entity) {
-    String shortName = dictionaryService.extractCompanyShortName(entity.getName());
+  public void setShortName(StatementDto statementDto) {
+    String shortName = dictionaryService.extractCompanyShortName(statementDto.getName());
     if (shortName == null) {
-      entity.setSyncState(SyncState.NOT_SEND);
+      statementDto.setSyncState(SyncState.NOT_SEND);
     } else {
-      entity.setShortName(shortName);
+      statementDto.setShortName(shortName);
+      statementDto.setSyncState(SyncState.READY_TO_SEND);
     }
-  }
-
-  @Override
-  protected StatementEntity entityPreSaveAction(StatementEntity entity) {
-    setShortName(entity);
-    return super.entityPreSaveAction(entity);
-  }
-
-  @Override
-  protected StatementEntity entityPreUpdateAction(StatementEntity entity) {
-    setShortName(entity);
-    return super.entityPreUpdateAction(entity);
   }
 
   @Override

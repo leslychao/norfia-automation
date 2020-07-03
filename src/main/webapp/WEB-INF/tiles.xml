@@ -22,7 +22,7 @@
 	<definition name="dictionary" extends="base">
 		<put-attribute name="body" value="/WEB-INF/jsp/dictionary.jsp" />
 	</definition>
-	
+
 	<definition name="dictionaryform" extends="base">
 		<put-attribute name="body" value="/WEB-INF/jsp/dictionaryform.jsp" />
 	</definition>
@@ -30,5 +30,9 @@
 	<definition name="company" extends="base">
 		<put-attribute name="body" value="/WEB-INF/jsp/company.jsp" />
 	</definition>
-	
+
+	<definition name="statementeditform" extends="base">
+		<put-attribute name="body" value="/WEB-INF/jsp/statementeditform.jsp" />
+	</definition>
+
 </tiles-definitions>

@@ -2,6 +2,7 @@ package com.vkim.skyeng.controller;
 
 import com.vkim.skyeng.dto.AppConfigDto;
 import com.vkim.skyeng.dto.DictionaryDto;
+import com.vkim.skyeng.dto.StatementDto;
 import com.vkim.skyeng.service.DictionaryService;
 import com.vkim.skyeng.service.SkyEngIntegrationService;
 import com.vkim.skyeng.service.StatementService;
@@ -95,8 +96,15 @@ public class HomeController {
   }
 
   @RequestMapping(value = {"/home/editStatement"}, method = RequestMethod.GET)
-  public RedirectView editStatement(@RequestParam("id") Long id, HttpSession session) {
-    AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
+  public String editStatement(@RequestParam("id") long id, Model model) {
+    model.addAttribute("statement", statementService.get(id));
+    return "statementeditform";
+  }
+
+  @RequestMapping(value = {"/home/saveStatement"}, method = RequestMethod.POST)
+  public RedirectView saveStatement(@ModelAttribute StatementDto statementDto) {
+    statementService.setShortName(statementDto);
+    statementService.update(statementDto);
     return new RedirectView("/home");
   }
 
