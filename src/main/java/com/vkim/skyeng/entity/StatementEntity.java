@@ -17,7 +17,6 @@ import lombok.Setter;
 @Table(name = "statements", indexes = {
     @Index(name = "statements_idx_01", columnList = "id", unique = true),
     @Index(name = "statements_idx_02", columnList = "syncState"),
-    @Index(name = "statements_idx_03", columnList = "shortName"),
     @Index(name = "statements_idx_04", columnList = "packId")
 })
 @Getter

@@ -103,7 +103,6 @@ public class HomeController {
 
   @RequestMapping(value = {"/home/saveStatement"}, method = RequestMethod.POST)
   public RedirectView saveStatement(@ModelAttribute StatementDto statementDto) {
-    statementService.setShortName(statementDto);
     statementService.update(statementDto);
     return new RedirectView("/home");
   }

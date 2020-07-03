@@ -194,7 +194,6 @@
 									<th scope="col">Оповещения</th>
 									<th scope="col">Кредит</th>
 									<th scope="col">Наименование</th>
-									<th scope="col">Краткое Наименование</th>
 									<th scope="col">Статус Синхронизации</th>
 									<th scope="col">ИНН</th>
 									<th scope="col">Назначение платежа</th>
@@ -246,7 +245,6 @@
 											</c:choose></td>
 										<td>${statement.credit}</td>
 										<td>${statement.name}</td>
-										<td>${statement.shortName}</td>
 										<td>${statement.syncState}</td>
 										<td>${statement.inn}</td>
 										<td>${statement.paymentDetails}</td>
