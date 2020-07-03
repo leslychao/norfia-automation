@@ -297,7 +297,7 @@ public class SkyEngIntegrationService {
       DictionaryDto dictionaryDto = dictionaryService
           .findByDictionaryTypeAndDictionaryKey(DictionaryType.MANAGERS_KAM,
               kamManager.getFullName());
-      result.append("KAM ").append(
+      result.append(", KAM ").append(
           dictionaryDto == null ? kamManager.getFullName() : dictionaryDto.getDictionaryValue());
     }
 
@@ -308,7 +308,7 @@ public class SkyEngIntegrationService {
       DictionaryDto dictionaryDto = dictionaryService
           .findByDictionaryTypeAndDictionaryKey(DictionaryType.MANAGERS_KAM,
               amManager.getFullName());
-      result.append("AM ").append(
+      result.append(", AM ").append(
           dictionaryDto == null ? amManager.getFullName() : dictionaryDto.getDictionaryValue());
     }
 

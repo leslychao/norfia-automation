@@ -9,7 +9,6 @@
 				action="/home/saveStatement" modelAttribute="statement">
 				<form:input type="hidden" path="id" />
 				<form:input type="hidden" path="credit" />
-				<form:input type="hidden" path="shortName" />
 				<form:input type="hidden" path="inn" />
 				<form:input type="hidden" path="packId" />
 				<form:input type="hidden" path="syncState" />

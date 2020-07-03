@@ -5,6 +5,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+import com.vkim.skyeng.SyncState;
 import com.vkim.skyeng.dto.AppConfigDto;
 import com.vkim.skyeng.dto.StatementDto;
 import com.vkim.skyeng.entity.StatementEntity;
@@ -103,6 +104,7 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
     statementDto.setInn(inn);
     statementDto.setPaymentDetails(paymentDetails);
     statementDto.setPackId(packId);
+    statementDto.setSyncState(SyncState.READY_TO_SEND);
 
     return statementDto;
   }
