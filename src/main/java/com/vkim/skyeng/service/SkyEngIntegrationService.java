@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -161,7 +162,9 @@ public class SkyEngIntegrationService {
       throw new RuntimeException(e);
     }
     JSONObject jsonObject = new JSONObject(stringEntity);
-    externalCompany.setInn(jsonObject.getJSONObject("data").getLong("tin"));
+    if (!jsonObject.getJSONObject("data").isNull("tin")) {
+      externalCompany.setInn(jsonObject.getJSONObject("data").getLong("tin"));
+    }
   }
 
   public static List<ExternalCompany> getCompanies(String companyName) {
@@ -316,7 +319,8 @@ public class SkyEngIntegrationService {
               stringBuilder.append("- can't extract payment number \n");
             }
             companyDto.setPaymentNumber(paymentNumber);
-            boolean innMatched = statementDto.getInn().equals(externalCompany.getInn().toString());
+            boolean innMatched = StringUtils
+                .equals(statementDto.getInn(), String.valueOf(externalCompany.getInn()));
             if (!innMatched) {
               stringBuilder.append("- inn not matched \n");
             }

@@ -94,7 +94,7 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
 
   private StatementDto toStatementDto(Map<String, String> statementXls, String packId) {
     String credit = getStringCellValue(statementXls, "Кредит", null);
-    String name = getStringCellValue(statementXls, "Наименование ", null);
+    String name = getStringCellValue(statementXls, "Наименование", null);
     String inn = getStringCellValue(statementXls, "ИНН", null);
     String paymentDetails = getStringCellValue(statementXls, "Назначение платежа", null);
 
