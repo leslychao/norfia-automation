@@ -190,7 +190,8 @@ public class SkyEngIntegrationService {
         externalCompany.setContractId(jsonArray.getJSONObject(i).getLong("contractId"));
       }
       setInn(externalCompany);
-      if (!"special_offer".equals(externalCompany.getPaymentType())) {
+      if (!"special_offer".equals(externalCompany.getPaymentType()) || !StringUtils
+          .isEmpty(externalCompany.getPaymentType())) {
         companies.add(externalCompany);
       }
     }
