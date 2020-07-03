@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,7 +104,14 @@ public class SkyEngIntegrationService {
     private String surname;
 
     public String getFullName() {
-      return name + " " + surname;
+      StringBuilder result = new StringBuilder();
+      if (StringUtils.isNotEmpty(name)) {
+        result.append(name);
+      }
+      if (StringUtils.isNotEmpty(surname)) {
+        result.append(" " + surname);
+      }
+      return result.toString();
     }
   }
 
@@ -321,11 +329,13 @@ public class SkyEngIntegrationService {
     statements.stream()
         .filter(statementDto -> SyncState.READY_TO_SEND == statementDto.getSyncState())
         .forEach(statementDto -> {
+          boolean isApplicantIndividual = false;
           String companyName = statementDto.getName();
           Pattern pattern = Pattern.compile("(?<=\")[^\"]+(?=\")");
           Matcher matcher = pattern.matcher(companyName);
           if (matcher.find()) {
             companyName = matcher.group();
+            isApplicantIndividual = true;
           }
           List<ExternalCompany> externalCompanies = getCompanies(companyName);
           Map<ExternalCompany, Contract> companyContractMap = externalCompanies.stream()
@@ -342,13 +352,17 @@ public class SkyEngIntegrationService {
             statementService.update(statementDto);
             return;
           }
-          companyContractMap.forEach((externalCompany, contract) -> {
+          for (Entry<ExternalCompany, Contract> entry : companyContractMap.entrySet()) {
+            ExternalCompany externalCompany = entry.getKey();
+            Contract contract = entry.getValue();
             if (contract.getId() == null) {
               logStringBuilder.append("- contract id is empty \n");
             }
             CompanyDto companyDto = new CompanyDto();
             companyDto.setExternalCompanyId(externalCompany.getCompanyId());
-            companyDto.setCompanyName(statementDto.getName());
+            StringBuilder exportedCompanyName = new StringBuilder(
+                isApplicantIndividual ? "индивидуальный предприниматель " + statementDto.getName()
+                    : statementDto.getName());
             String slackCounterparties = extractSlackCounterparties(contract, logStringBuilder);
             companyDto.setManagers(slackCounterparties);
             companyDto.setCredit(statementDto.getCredit());
@@ -361,14 +375,16 @@ public class SkyEngIntegrationService {
                 .equals(statementDto.getInn(), String.valueOf(externalCompany.getInn()));
             if (!innMatched) {
               logStringBuilder.append("- inn not matched \n");
+              exportedCompanyName.append(" (инн в срм и счете не совпадают)");
             }
             if (logStringBuilder.length() != 0) {
               statementDto.setLog(logStringBuilder.toString());
             }
+            companyDto.setCompanyName(exportedCompanyName.toString());
+            companyService.update(companyDto);
             statementDto.setSyncState(SyncState.SYNC_SUCCESS);
             statementService.update(statementDto);
-            companyService.update(companyDto);
-          });
+          }
         });
   }
 }
