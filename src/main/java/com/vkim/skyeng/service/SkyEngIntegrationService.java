@@ -111,14 +111,15 @@ public class SkyEngIntegrationService {
   }
 
   private CompanyService companyService;
-
   private StatementService statementService;
+  private DictionaryService dictionaryService;
 
   @Autowired
   public SkyEngIntegrationService(CompanyService companyService,
-      StatementService statementService) {
+      StatementService statementService, DictionaryService dictionaryService) {
     this.companyService = companyService;
     this.statementService = statementService;
+    this.dictionaryService = dictionaryService;
   }
 
   static String doGet(URI uri) {
@@ -264,6 +265,10 @@ public class SkyEngIntegrationService {
     if (matcher.find()) {
       return matcher.group();
     }
+    return null;
+  }
+
+  private String extractManagerTag(Contract contract) {
     return null;
   }
 

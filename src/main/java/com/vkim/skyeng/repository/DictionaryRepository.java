@@ -10,4 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface DictionaryRepository extends CrudRepository<DictionaryEntity, Long> {
 
   List<DictionaryEntity> findByDictionaryTypeOrderByIdAsc(DictionaryType dictionaryType);
+
+  DictionaryEntity findByDictionaryTypeAndDictionaryKeyOrderByIdAsc(DictionaryType dictionaryType,
+      String dictionaryKey);
 }

@@ -40,6 +40,13 @@ public class DictionaryService extends AbstractCrudService<DictionaryDto, Dictio
         .collect(toList());
   }
 
+  @Transactional(readOnly = true)
+  public DictionaryDto findByDictionaryTypeAndDictionaryKey(DictionaryType dictionaryType,
+      String dictionaryKey) {
+    return mapToDto(dictionaryRepository
+        .findByDictionaryTypeAndDictionaryKeyOrderByIdAsc(dictionaryType, dictionaryKey));
+  }
+
   private boolean contains(String str, String searchStr) {
     return Arrays.stream(str.split(" ")).allMatch(s -> {
       Pattern pattern = Pattern
