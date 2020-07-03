@@ -7,10 +7,7 @@ import com.vkim.skyeng.dto.DictionaryDto;
 import com.vkim.skyeng.entity.DictionaryEntity;
 import com.vkim.skyeng.mapper.BeanMapper;
 import com.vkim.skyeng.repository.DictionaryRepository;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -45,32 +42,6 @@ public class DictionaryService extends AbstractCrudService<DictionaryDto, Dictio
       String dictionaryKey) {
     return mapToDto(dictionaryRepository
         .findByDictionaryTypeAndDictionaryKeyOrderByIdAsc(dictionaryType, dictionaryKey));
-  }
-
-  private boolean contains(String str, String searchStr) {
-    return Arrays.stream(str.split(" ")).allMatch(s -> {
-      Pattern pattern = Pattern
-          .compile("\\b(" + s + ")\\b", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-      Matcher matcher = pattern.matcher(searchStr);
-      return matcher.find();
-    });
-  }
-
-  public String extractCompanyShortName(String companyName) {
-    List<DictionaryDto> dictionaries = findByDictionaryType(DictionaryType.LEGAL_PERSONS);
-    return dictionaries
-        .stream()
-        .filter(dictionaryDto -> contains(dictionaryDto.getDictionaryValue(), companyName))
-        .findAny()
-        .map(dictionaryDto -> {
-          Pattern pattern = Pattern.compile("(?<=\")[^\"]+(?=\")");
-          Matcher matcher = pattern.matcher(companyName);
-          if (matcher.find()) {
-            return matcher.group();
-          }
-          return null;
-        })
-        .orElse(null);
   }
 
   @Override

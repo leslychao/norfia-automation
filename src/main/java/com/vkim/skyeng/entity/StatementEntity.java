@@ -30,7 +30,6 @@ public class StatementEntity extends BaseEntity {
 
   private String credit;
   private String name;
-  private String shortName;
   private String inn;
   private String paymentDetails;
   private String packId;

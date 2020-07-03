@@ -14,7 +14,6 @@ public class StatementMapper implements BeanMapper<StatementDto, StatementEntity
     StatementEntity statementEntity = new StatementEntity();
     statementEntity.setCredit(dto.getCredit());
     statementEntity.setName(dto.getName());
-    statementEntity.setShortName(dto.getShortName());
     statementEntity.setInn(dto.getInn());
     statementEntity.setPaymentDetails(dto.getPaymentDetails());
     statementEntity.setPackId(dto.getPackId());
@@ -33,7 +32,6 @@ public class StatementMapper implements BeanMapper<StatementDto, StatementEntity
     StatementDto statementDto = new StatementDto();
     statementDto.setCredit(entity.getCredit());
     statementDto.setName(entity.getName());
-    statementDto.setShortName(entity.getShortName());
     statementDto.setInn(entity.getInn());
     statementDto.setPaymentDetails(entity.getPaymentDetails());
     statementDto.setPackId(entity.getPackId());
@@ -48,7 +46,6 @@ public class StatementMapper implements BeanMapper<StatementDto, StatementEntity
   public StatementEntity updateEntityWithDto(StatementDto dto, StatementEntity entity) {
     entity.setCredit(dto.getCredit());
     entity.setName(dto.getName());
-    entity.setShortName(dto.getShortName());
     entity.setInn(dto.getInn());
     entity.setPaymentDetails(dto.getPaymentDetails());
     entity.setPackId(dto.getPackId());

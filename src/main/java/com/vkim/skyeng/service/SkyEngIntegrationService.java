@@ -269,7 +269,7 @@ public class SkyEngIntegrationService {
 
   private String extractPaymentNumber(String paymentDetails) {
     Pattern pattern = Pattern
-        .compile("(?<=№)*[\\d]{3,4}", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+        .compile("(?<=[№N])*[\\d]{3,4}", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     Matcher matcher = pattern.matcher(paymentDetails);
     if (matcher.find()) {
       return matcher.group();
@@ -320,7 +320,13 @@ public class SkyEngIntegrationService {
     statements.stream()
         .filter(statementDto -> SyncState.READY_TO_SEND == statementDto.getSyncState())
         .forEach(statementDto -> {
-          List<ExternalCompany> externalCompanies = getCompanies(statementDto.getShortName());
+          String companyName = statementDto.getName();
+          Pattern pattern = Pattern.compile("(?<=\")[^\"]+(?=\")");
+          Matcher matcher = pattern.matcher(companyName);
+          if (matcher.find()) {
+            companyName = matcher.group();
+          }
+          List<ExternalCompany> externalCompanies = getCompanies(companyName);
           Map<ExternalCompany, Contract> companyContractMap = externalCompanies.stream()
               .collect(Collectors.groupingBy(externalCompany -> externalCompany,
                   Collectors
@@ -341,7 +347,7 @@ public class SkyEngIntegrationService {
             }
             CompanyDto companyDto = new CompanyDto();
             companyDto.setExternalCompanyId(externalCompany.getCompanyId());
-            companyDto.setCompanyName(statementDto.getShortName());
+            companyDto.setCompanyName(statementDto.getName());
             String slackCounterparties = extractSlackCounterparties(contract, logStringBuilder);
             companyDto.setManagers(slackCounterparties);
             companyDto.setCredit(statementDto.getCredit());
