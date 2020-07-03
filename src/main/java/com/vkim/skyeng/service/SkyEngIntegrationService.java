@@ -1,8 +1,10 @@
 package com.vkim.skyeng.service;
 
+import com.vkim.skyeng.DictionaryType;
 import com.vkim.skyeng.SyncState;
 import com.vkim.skyeng.dto.AppConfigDto;
 import com.vkim.skyeng.dto.CompanyDto;
+import com.vkim.skyeng.dto.DictionaryDto;
 import com.vkim.skyeng.dto.StatementDto;
 import java.io.IOException;
 import java.net.URI;
@@ -98,6 +100,10 @@ public class SkyEngIntegrationService {
     private Long id;
     private String name;
     private String surname;
+
+    public String getFullName() {
+      return name + " " + surname;
+    }
   }
 
   public enum ManagerType {
@@ -268,7 +274,10 @@ public class SkyEngIntegrationService {
     return null;
   }
 
-  private String extractManagerTag(Contract contract) {
+  private String extractManagerTag(Contract contract, StringBuilder logStringBuilder) {
+    DictionaryDto dictionaryDto = dictionaryService
+        .findByDictionaryTypeAndDictionaryKey(DictionaryType.MANAGERS_MC,
+            contract.getSupportManager().getFullName());
     return null;
   }
 
