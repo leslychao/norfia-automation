@@ -138,7 +138,6 @@ public class SkyEngIntegrationService {
   }
 
   static String doGet(URI uri) {
-  public static String doGet(URI uri) {
     HttpGet httpGet = new HttpGet(uri);
     httpGet.addHeader("Cookie",
         "session_global=83c95424f81ebee8febe30e48e8aacb8; session_cabinet=cc4f51977c549dd7fbcc622c6d420dee");
