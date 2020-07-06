@@ -2,15 +2,10 @@ package com.vkim.skyeng.service.xssf;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.apache.poi.ooxml.util.SAXHelper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
@@ -150,19 +145,5 @@ public class XlsServiceImpl implements XlsService {
       sheetData.setLastRowNum(currentRowNum);
       sheetData.setRowCount(currentRowNum + 1);
     }
-  }
-
-  @Getter
-  @Setter
-  @ToString
-  public static class SheetData {
-
-    private String sheetName;
-    private int headerRowNum;
-    private int startRowNum;
-    private int lastRowNum;
-    private int rowCount;
-    private List<Map<String, String>> data = new ArrayList<>();
-    private Map<String, Integer> columnIndex = new HashMap<>();
   }
 }
