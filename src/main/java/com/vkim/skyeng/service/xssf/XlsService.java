@@ -7,6 +7,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 public interface XlsService {
 
   SheetData processXls(InputStream inputStream, String sheetName, int skipRowNum,
-      int headerRowNum, ExcelRowContentCollback excelRowContentCollback)
+      int headerRowNum, ExcelRowContentCallback excelRowContentCallback)
       throws IOException, InvalidFormatException;
 }

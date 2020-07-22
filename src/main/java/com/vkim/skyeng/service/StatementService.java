@@ -92,6 +92,13 @@ public class StatementService extends AbstractCrudService<StatementDto, Statemen
         .collect(toList());
   }
 
+  @Override
+  @Transactional
+  public StatementDto update(StatementDto dto) {
+    dto.setSyncState(SyncState.READY_TO_SEND);
+    return super.update(dto);
+  }
+
   private StatementDto toStatementDto(Map<String, String> statementXls, String packId) {
     String credit = getStringCellValue(statementXls, "Кредит", null);
     String name = getStringCellValue(statementXls, "Наименование", null);

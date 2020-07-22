@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StatementsRowContentCallback implements ExcelRowContentCollback {
+public class StatementsRowContentCallback implements ExcelRowContentCallback {
 
   @Override
   public void processRow(int rowNum, Map<String, String> mapData, List<Map<String, String>> data) {

@@ -28,7 +28,7 @@ import org.xml.sax.XMLReader;
 public class XlsServiceImpl implements XlsService {
 
   SheetData doProcessXls(OPCPackage opcPackage, String sheetName, int skipRowNum,
-      int headerRowNum, ExcelRowContentCollback excelRowContentCollback) {
+      int headerRowNum, ExcelRowContentCallback excelRowContentCallback) {
     SheetData sheetData = new SheetData();
     sheetData.setSheetName(sheetName);
     sheetData.setHeaderRowNum(headerRowNum);
@@ -43,7 +43,7 @@ public class XlsServiceImpl implements XlsService {
             processSheet(
                 xssfReader.getStylesTable(),
                 new ReadOnlySharedStringsTable(opcPackage),
-                new ExcelWorkSheetHandler(sheetData, excelRowContentCollback, skipRowNum,
+                new ExcelWorkSheetHandler(sheetData, excelRowContentCallback, skipRowNum,
                     headerRowNum),
                 sheetInputStream);
           } finally {
@@ -59,10 +59,10 @@ public class XlsServiceImpl implements XlsService {
 
   @Override
   public SheetData processXls(InputStream inputStream, String sheetName, int skipRowNum,
-      int headerRowNum, ExcelRowContentCollback excelRowContentCollback)
+      int headerRowNum, ExcelRowContentCallback excelRowContentCallback)
       throws IOException, InvalidFormatException {
     return doProcessXls(OPCPackage.open(inputStream), sheetName, skipRowNum, headerRowNum,
-        excelRowContentCollback);
+        excelRowContentCallback);
   }
 
   void processSheet(StylesTable stylesTable, ReadOnlySharedStringsTable readOnlySharedStringsTable,
@@ -87,7 +87,7 @@ public class XlsServiceImpl implements XlsService {
   private class ExcelWorkSheetHandler implements SheetContentsHandler {
 
     private SheetData sheetData;
-    ExcelRowContentCollback excelRowContentCollback;
+    ExcelRowContentCallback excelRowContentCallback;
     private Map<String, String> rowTmp = new LinkedHashMap<>();
     private Map<Integer, String> cellMapping = new HashMap<>();
 
@@ -97,9 +97,9 @@ public class XlsServiceImpl implements XlsService {
     private boolean isFirstRow = true;
 
     ExcelWorkSheetHandler(SheetData sheetData,
-        ExcelRowContentCollback excelRowContentCollback, int skipRowNum, int headerRowNum) {
+        ExcelRowContentCallback excelRowContentCallback, int skipRowNum, int headerRowNum) {
       this.sheetData = sheetData;
-      this.excelRowContentCollback = excelRowContentCollback;
+      this.excelRowContentCallback = excelRowContentCallback;
       this.skipRowNum = skipRowNum;
       this.headerRowNum = headerRowNum;
     }
@@ -121,7 +121,7 @@ public class XlsServiceImpl implements XlsService {
             isFirstRow = false;
             sheetData.setStartRowNum(rowNum);
           }
-          excelRowContentCollback.processRow(rowNum, rowTmp, sheetData.getData());
+          excelRowContentCallback.processRow(rowNum, rowTmp, sheetData.getData());
           rowTmp.clear();
         }
       }
