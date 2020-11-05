@@ -36,7 +36,6 @@ public class DictionaryMapper implements BeanMapper<DictionaryDto, DictionaryEnt
     return dictionaryDto;
   }
 
-  @Override
   public DictionaryEntity updateEntityWithDto(DictionaryDto dto, DictionaryEntity entity) {
     entity.setModule(dto.getModule());
     entity.setDictionaryType(dto.getDictionaryType());

@@ -42,7 +42,6 @@ public class StatementMapper implements BeanMapper<StatementDto, StatementEntity
     return statementDto;
   }
 
-  @Override
   public StatementEntity updateEntityWithDto(StatementDto dto, StatementEntity entity) {
     entity.setCredit(dto.getCredit());
     entity.setName(dto.getName());

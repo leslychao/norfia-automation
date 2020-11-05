@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @SpringBootApplication
-@EntityScan(basePackages = {"com.vkim.skyeng.entity"})
+//@EntityScan(basePackages = {"com.vkim.skyeng.entity"})
 public class SkyengautoApplication {
 
   public static void main(String[] args) {
