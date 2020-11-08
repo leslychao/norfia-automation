@@ -39,9 +39,9 @@ public class UserService extends AbstractCrudService<UserDto, UserEntity> implem
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByUserName(s)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("can't find user by login: [%s]", s)));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByUserName(username)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("can't find user by login: %s", username)));
         return userEntity.getUserDetails();
     }
 

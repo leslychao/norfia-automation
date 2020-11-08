@@ -5,18 +5,18 @@
 
 <tiles-definitions>
 
-	<definition name="base" template="/WEB-INF/jsp/layouts/generic.jsp">
-		<put-attribute name="header" value="/WEB-INF/jsp/layouts/header.jsp" />
-		<put-attribute name="body" value="" />
-		<put-attribute name="footer" value="/WEB-INF/jsp/layouts/footer.jsp" />
-	</definition>
+  <definition name="base" template="/WEB-INF/jsp/layouts/generic.jsp">
+    <put-attribute name="header" value="/WEB-INF/jsp/layouts/header.jsp"/>
+    <put-attribute name="body" value=""/>
+    <put-attribute name="footer" value="/WEB-INF/jsp/layouts/footer.jsp"/>
+  </definition>
 
-	<definition name="home" extends="base">
-		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
-	</definition>
+  <definition name="home" extends="base">
+    <put-attribute name="body" value="/WEB-INF/jsp/index.jsp"/>
+  </definition>
 
-	<definition name="init" extends="base">
-		<put-attribute name="body" value="/WEB-INF/jsp/init.jsp" />
-	</definition>
+  <definition name="login" extends="base">
+    <put-attribute name="body" value="/WEB-INF/jsp/login.jsp"/>
+  </definition>
 
 </tiles-definitions>

@@ -1,3 +1,5 @@
+/*
+
 package com.vkim.skyeng.controller;
 
 import com.vkim.skyeng.dto.AppConfigDto;
@@ -13,13 +15,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class InitController {
-
-  @RequestMapping(value = {"/init"})
-  public String init(HttpSession session) {
-    AppConfigDto appConfigDto = (AppConfigDto) session.getAttribute("app_config");
-    appConfigDto.setPackId(UUID.randomUUID().toString());
-    return "init";
-  }
 
   @RequestMapping(value = {"/init/submit"}, method = RequestMethod.POST)
   public RedirectView init(@RequestParam MultipartFile xlsFile,
@@ -40,3 +35,4 @@ public class InitController {
     return new RedirectView("/home");
   }
 }
+*/

@@ -11,42 +11,64 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements
-        WebMvcConfigurer {
+    WebMvcConfigurer {
 
-    @Autowired
-    private UserService userService;
+  private UserService userService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and().httpBasic()
-                .and().sessionManagement().disable();
-    }
+  @Autowired
+  public SecurityConfiguration(UserService userService) {
+    this.userService = userService;
+  }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(userService).passwordEncoder(passwordEncoder());
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable()
+        .authorizeRequests()
+        .antMatchers("/admin/**").hasRole("ADMIN")
+        .antMatchers("/login/**", "/resources/**").permitAll()
+        .anyRequest().authenticated()
+        .and()
+        .formLogin()
+        .loginPage("/login")
+        .loginProcessingUrl("/login/process")
+        .defaultSuccessUrl("/home", true)
+        .failureUrl("/login/error")
+        .and()
+        .logout()
+        .logoutUrl("/logout")
+        .deleteCookies("JSESSIONID")
+        .logoutSuccessHandler(logoutSuccessHandler());
+  }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
-                "/configuration/security",
-                "/swagger-ui/**",
-                "/webjars/**");
-    }
+  @Bean
+  public LogoutSuccessHandler logoutSuccessHandler() {
+    return (httpServletRequest, httpServletResponse, authentication) -> {
+    };
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Override
+  public void configure(AuthenticationManagerBuilder builder) throws Exception {
+    builder.userDetailsService(userService).passwordEncoder(passwordEncoder());
+  }
+
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().antMatchers("/v2/api-docs",
+        "/configuration/ui",
+        "/swagger-resources/**",
+        "/configuration/security",
+        "/swagger-ui/**",
+        "/webjars/**");
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }
