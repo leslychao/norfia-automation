@@ -5,9 +5,6 @@
 <head>
 <script language="javascript">
 	document.body.onload = function() {
-		if ("${sessionScope.app_config.skyengCookie}".length == 0) {
-			$('#skyengCookieModal').modal('show');
-		}
 		$('html, body')
 				.animate(
 						{
@@ -19,28 +16,6 @@
 </script>
 </head>
 <body>
-	<div class="modal fade" id="skyengCookieModal" tabindex="-1"
-		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-body">
-					<form method="POST" action="/home/saveskyengcookie">
-						<div class="form-group">
-							<label for="skyengcookie" class="col-form-label">skyeng
-								cookie:</label>
-							<textarea class="form-control" id="skyengcookie"
-								name="skyengcookie"></textarea>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">Закрыть</button>
-							<button class="btn btn-primary" type="submit">Сохранить</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
 	<c:choose>
 		<c:when test="${empty statements}">
 			<div class="container">

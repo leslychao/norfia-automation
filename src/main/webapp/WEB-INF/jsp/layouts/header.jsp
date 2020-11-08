@@ -7,22 +7,8 @@
 				<li class="nav-item active"><a class="nav-link" href="/home">Norfia
 						Industries</a></li>
 				<li class="nav-item">
-					<a class="nav-link" href="/home/dictionary">Справочник</a>
-				</li>
-				<c:choose>
-					<c:when test="${sessionScope.app_config.lastUrl ne '/init'}">
-						<li class="nav-item"><a class="nav-link"
-							href="/home/clearskyengcookie">Очистить куки skyeng</a></li>
-					</c:when>
-				</c:choose>
-				<li class="nav-item">
 					<a class="nav-link" href="/init">
 						Другой документ
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/company">
-						Компании из Выписок B2B
 					</a>
 				</li>
 			</ul>
