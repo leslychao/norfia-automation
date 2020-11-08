@@ -2,94 +2,85 @@ package com.vkim.skyeng.dto;
 
 public class AppConfigDto extends BaseDto {
 
-    private byte[] fileData;
-    private String fileName;
-    private long fileSize;
-    private String skyengCookie;
-    private String sheetName;
-    private int skipRowNum;
-    private int headerRowNum;
-    private String lastUrl;
-    private String packId;
-    private long sectionToScroll;
+  private byte[] fileData;
+  private String fileName;
+  private long fileSize;
+  private String sheetName;
+  private int skipRowNum;
+  private int headerRowNum;
+  private String lastUrl;
+  private String packId;
+  private long sectionToScroll;
 
-    public byte[] getFileData() {
-        return fileData;
-    }
+  public byte[] getFileData() {
+    return fileData;
+  }
 
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData;
-    }
+  public void setFileData(byte[] fileData) {
+    this.fileData = fileData;
+  }
 
-    public String getFileName() {
-        return fileName;
-    }
+  public String getFileName() {
+    return fileName;
+  }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
 
-    public long getFileSize() {
-        return fileSize;
-    }
+  public long getFileSize() {
+    return fileSize;
+  }
 
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
+  public void setFileSize(long fileSize) {
+    this.fileSize = fileSize;
+  }
 
-    public String getSkyengCookie() {
-        return skyengCookie;
-    }
+  public String getSheetName() {
+    return sheetName;
+  }
 
-    public void setSkyengCookie(String skyengCookie) {
-        this.skyengCookie = skyengCookie;
-    }
+  public void setSheetName(String sheetName) {
+    this.sheetName = sheetName;
+  }
 
-    public String getSheetName() {
-        return sheetName;
-    }
+  public int getSkipRowNum() {
+    return skipRowNum;
+  }
 
-    public void setSheetName(String sheetName) {
-        this.sheetName = sheetName;
-    }
+  public void setSkipRowNum(int skipRowNum) {
+    this.skipRowNum = skipRowNum;
+  }
 
-    public int getSkipRowNum() {
-        return skipRowNum;
-    }
+  public int getHeaderRowNum() {
+    return headerRowNum;
+  }
 
-    public void setSkipRowNum(int skipRowNum) {
-        this.skipRowNum = skipRowNum;
-    }
+  public void setHeaderRowNum(int headerRowNum) {
+    this.headerRowNum = headerRowNum;
+  }
 
-    public int getHeaderRowNum() {
-        return headerRowNum;
-    }
+  public String getLastUrl() {
+    return lastUrl;
+  }
 
-    public void setHeaderRowNum(int headerRowNum) {
-        this.headerRowNum = headerRowNum;
-    }
+  public void setLastUrl(String lastUrl) {
+    this.lastUrl = lastUrl;
+  }
 
-    public String getLastUrl() {
-        return lastUrl;
-    }
+  public String getPackId() {
+    return packId;
+  }
 
-    public void setLastUrl(String lastUrl) {
-        this.lastUrl = lastUrl;
-    }
+  public void setPackId(String packId) {
+    this.packId = packId;
+  }
 
-    public String getPackId() {
-        return packId;
-    }
+  public long getSectionToScroll() {
+    return sectionToScroll;
+  }
 
-    public void setPackId(String packId) {
-        this.packId = packId;
-    }
-
-    public long getSectionToScroll() {
-        return sectionToScroll;
-    }
-
-    public void setSectionToScroll(long sectionToScroll) {
-        this.sectionToScroll = sectionToScroll;
-    }
+  public void setSectionToScroll(long sectionToScroll) {
+    this.sectionToScroll = sectionToScroll;
+  }
 }

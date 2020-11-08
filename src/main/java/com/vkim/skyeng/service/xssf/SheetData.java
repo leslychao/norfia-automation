@@ -7,67 +7,67 @@ import java.util.Map;
 
 public class SheetData {
 
-    private String sheetName;
-    private int headerRowNum;
-    private int startRowNum;
-    private int lastRowNum;
-    private int rowCount;
-    private List<Map<String, String>> data = new ArrayList<>();
-    private Map<String, Integer> columnIndex = new HashMap<>();
+  private String sheetName;
+  private int headerRowNum;
+  private int startRowNum;
+  private int lastRowNum;
+  private int rowCount;
+  private List<Map<String, String>> data = new ArrayList<>();
+  private Map<String, Integer> columnIndex = new HashMap<>();
 
-    public String getSheetName() {
-        return sheetName;
-    }
+  public String getSheetName() {
+    return sheetName;
+  }
 
-    public void setSheetName(String sheetName) {
-        this.sheetName = sheetName;
-    }
+  public void setSheetName(String sheetName) {
+    this.sheetName = sheetName;
+  }
 
-    public int getHeaderRowNum() {
-        return headerRowNum;
-    }
+  public int getHeaderRowNum() {
+    return headerRowNum;
+  }
 
-    public void setHeaderRowNum(int headerRowNum) {
-        this.headerRowNum = headerRowNum;
-    }
+  public void setHeaderRowNum(int headerRowNum) {
+    this.headerRowNum = headerRowNum;
+  }
 
-    public int getStartRowNum() {
-        return startRowNum;
-    }
+  public int getStartRowNum() {
+    return startRowNum;
+  }
 
-    public void setStartRowNum(int startRowNum) {
-        this.startRowNum = startRowNum;
-    }
+  public void setStartRowNum(int startRowNum) {
+    this.startRowNum = startRowNum;
+  }
 
-    public int getLastRowNum() {
-        return lastRowNum;
-    }
+  public int getLastRowNum() {
+    return lastRowNum;
+  }
 
-    public void setLastRowNum(int lastRowNum) {
-        this.lastRowNum = lastRowNum;
-    }
+  public void setLastRowNum(int lastRowNum) {
+    this.lastRowNum = lastRowNum;
+  }
 
-    public int getRowCount() {
-        return rowCount;
-    }
+  public int getRowCount() {
+    return rowCount;
+  }
 
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
+  public void setRowCount(int rowCount) {
+    this.rowCount = rowCount;
+  }
 
-    public List<Map<String, String>> getData() {
-        return data;
-    }
+  public List<Map<String, String>> getData() {
+    return data;
+  }
 
-    public void setData(List<Map<String, String>> data) {
-        this.data = data;
-    }
+  public void setData(List<Map<String, String>> data) {
+    this.data = data;
+  }
 
-    public Map<String, Integer> getColumnIndex() {
-        return columnIndex;
-    }
+  public Map<String, Integer> getColumnIndex() {
+    return columnIndex;
+  }
 
-    public void setColumnIndex(Map<String, Integer> columnIndex) {
-        this.columnIndex = columnIndex;
-    }
+  public void setColumnIndex(Map<String, Integer> columnIndex) {
+    this.columnIndex = columnIndex;
+  }
 }

@@ -1,27 +1,15 @@
 package com.vkim.skyeng.dto;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 public class UserDetailsDto extends BaseDto {
 
-    private LocalDateTime lastUpdated;
     private String password;
     private Set<String> userRoles;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-
-    @Override
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    @Override
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
     public String getPassword() {
         return password;
