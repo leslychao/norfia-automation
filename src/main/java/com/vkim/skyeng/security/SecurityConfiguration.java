@@ -1,6 +1,7 @@
 package com.vkim.skyeng.security;
 
-import com.vkim.skyeng.service.UserService;
+import com.vkim.skyeng.exceptions.EntityNotFoundException;
+import com.vkim.skyeng.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +20,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements
     WebMvcConfigurer {
 
-  private UserService userService;
+  private UserRepository userRepository;
 
   @Autowired
-  public SecurityConfiguration(UserService userService) {
-    this.userService = userService;
+  public SecurityConfiguration(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -54,7 +55,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
   @Override
   public void configure(AuthenticationManagerBuilder builder) throws Exception {
-    builder.userDetailsService(userService).passwordEncoder(passwordEncoder());
+    builder.userDetailsService(username -> userRepository.findByUserName(username)
+        .orElseThrow(() -> new EntityNotFoundException(
+            String.format("can't find user by login: %s", username))).getUserDetails())
+        .passwordEncoder(passwordEncoder());
   }
 
   @Override

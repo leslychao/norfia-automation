@@ -18,6 +18,6 @@
     </div>
     <button class="btn btn-info btn-block my-4" type="submit">Sign in</button>
     <p>Not a member?
-        <a href="">Register</a>
+        <a href="/login/register">Sign up</a>
     </p>
 </form:form>
