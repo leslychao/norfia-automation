@@ -23,4 +23,8 @@
     <put-attribute name="body" value="/WEB-INF/jsp/register.jsp"/>
   </definition>
 
+  <definition name="init_testing" extends="base">
+    <put-attribute name="body" value="/WEB-INF/jsp/init_testing.jsp"/>
+  </definition>
+
 </tiles-definitions>

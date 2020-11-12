@@ -8,7 +8,7 @@
                     Сервисы
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Тестинг</a>
+                    <a class="dropdown-item" href="/testing/init">Тестинг</a>
                 </div>
             </li>
         </ul>

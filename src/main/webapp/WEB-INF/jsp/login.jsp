@@ -3,9 +3,9 @@
 <form:form class="text-center border border-light p-5 col-3" action="/login/process" method="POST">
     <p class="h4 mb-4">Sign in</p>
     <input type="text" id="defaultLoginFormEmail" class="form-control mb-4"
-           placeholder="Имя пользователя" name="username">
+           placeholder="Имя пользователя" name="username" required="required">
     <input type="password" id="defaultLoginFormPassword" class="form-control mb-4"
-           placeholder="Пароль" name="password">
+           placeholder="Пароль" name="password" required="required">
     <div class="d-flex justify-content-around">
         <div>
             <div class="custom-control custom-checkbox">

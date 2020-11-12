@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(isolation = Isolation.READ_COMMITTED)
 public class UserService extends AbstractCrudService<UserDto, UserEntity> {
 
   private UserRepository userRepository;
