@@ -11,12 +11,14 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users_details")
+@Setter
 public class UserDetailsEntity extends LongIdEntity implements UserDetails {
 
   private String password;
@@ -30,6 +32,10 @@ public class UserDetailsEntity extends LongIdEntity implements UserDetails {
   private boolean accountNonLocked;
   private boolean credentialsNonExpired;
   private boolean enabled;
+
+  public Set<UserRolesEntity> getUserRoles() {
+    return userRoles;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
