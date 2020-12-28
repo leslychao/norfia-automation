@@ -2,7 +2,7 @@ package com.vkim.norfia.security;
 
 import com.vkim.norfia.exceptions.EntityNotFoundException;
 import com.vkim.norfia.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,15 +17,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements
     WebMvcConfigurer {
 
-  private UserRepository userRepository;
-
-  @Autowired
-  public SecurityConfiguration(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+  private final UserRepository userRepository;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {

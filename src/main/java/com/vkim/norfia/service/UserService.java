@@ -9,7 +9,7 @@ import com.vkim.norfia.mapper.UserMapper;
 import com.vkim.norfia.repository.UserRepository;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,19 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED)
+@RequiredArgsConstructor
 public class UserService extends AbstractCrudService<UserDto, UserEntity> {
 
-  private UserRepository userRepository;
-  private UserMapper userMapper;
-  private PasswordEncoder passwordEncoder;
-
-  @Autowired
-  public UserService(UserRepository userRepository, UserMapper userMapper,
-      PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
-    this.userMapper = userMapper;
-    this.passwordEncoder = passwordEncoder;
-  }
+  private final UserRepository userRepository;
+  private final UserMapper userMapper;
+  private final PasswordEncoder passwordEncoder;
 
   public UserDto saveUser(UserDto userDto) {
     return save(userDto);
