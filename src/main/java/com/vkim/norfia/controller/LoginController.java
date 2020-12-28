@@ -28,18 +28,18 @@ public class LoginController {
     return "login";
   }
 
-  @GetMapping("error")
+  @GetMapping("/error")
   public String error() {
     throw new AuthenticationException();
   }
 
-  @GetMapping("register")
+  @GetMapping("/register")
   public String registerPage(@ModelAttribute UserDto userDto) {
     userDto.setUserDetails(new UserDetailsDto());
     return "register";
   }
 
-  @PostMapping("register")
+  @PostMapping("/register")
   public String register(@RequestParam String confirmPassword, UserDto userDto, Model model) {
     if (!StringUtils.equals(confirmPassword, userDto.getUserDetails().getPassword())) {
       model.addAttribute("error", "Passwords not match");
