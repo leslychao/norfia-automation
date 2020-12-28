@@ -1,8 +1,12 @@
 package com.vkim.norfia.dto;
 
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Getter
+@Setter
 public class UserDto extends BaseDto {
 
   private String userName;
@@ -12,43 +16,4 @@ public class UserDto extends BaseDto {
   private LocalDate birthDate;
   private UserDetailsDto userDetails;
 
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public LocalDate getBirthDate() {
-    return birthDate;
-  }
-
-  public void setBirthDate(LocalDate birthDate) {
-    this.birthDate = birthDate;
-  }
-
-  public UserDetailsDto getUserDetails() {
-    return userDetails;
-  }
-
-  public void setUserDetails(UserDetailsDto userDetails) {
-    this.userDetails = userDetails;
-  }
 }

@@ -14,14 +14,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users_details")
-@SequenceGenerator(name = "sequence_generator", sequenceName = "users_details_seq", allocationSize = 1)
-public class UserDetailsEntity implements BaseEntity, UserDetails {
+public class UserDetailsEntity implements UserDetails {
 
   @Id
   private Long id;
@@ -47,87 +48,32 @@ public class UserDetailsEntity implements BaseEntity, UserDetails {
   }
 
   @Override
-  public String getUsername() {
-    return user.getUserName();
-  }
-
-  @Override
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  @Override
-  public LocalDateTime getLastUpdated() {
-    return lastUpdated;
-  }
-
-  @Override
-  public void setLastUpdated(LocalDateTime lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
-
-  @Override
   public String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<UserRolesEntity> getUserRoles() {
-    return userRoles;
-  }
-
-  public void setUserRoles(Set<UserRolesEntity> userRoles) {
-    this.userRoles = userRoles;
-  }
-
-  public UserEntity getUser() {
-    return user;
-  }
-
-  public void setUser(UserEntity user) {
-    this.user = user;
+  @Override
+  public String getUsername() {
+    return null;
   }
 
   @Override
   public boolean isAccountNonExpired() {
-    return accountNonExpired;
-  }
-
-  public void setAccountNonExpired(boolean accountNonExpired) {
-    this.accountNonExpired = accountNonExpired;
+    return false;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return accountNonLocked;
-  }
-
-  public void setAccountNonLocked(boolean accountNonLocked) {
-    this.accountNonLocked = accountNonLocked;
+    return false;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return credentialsNonExpired;
-  }
-
-  public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-    this.credentialsNonExpired = credentialsNonExpired;
+    return false;
   }
 
   @Override
   public boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
+    return false;
   }
 }

@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @SpringBootApplication
-public class SkyengautoApplication {
+public class Application {
 
   public static void main(String[] args) {
-    SpringApplication.run(SkyengautoApplication.class, args);
+    SpringApplication.run(Application.class, args);
   }
 
   @Bean

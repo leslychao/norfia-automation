@@ -5,10 +5,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user_roles")
-@SequenceGenerator(name = "sequence_generator", sequenceName = "user_roles_seq", allocationSize = 1)
+@Getter
+@Setter
 public class UserRolesEntity extends LongIdEntity {
 
   private String name;

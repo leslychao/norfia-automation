@@ -8,10 +8,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
-@SequenceGenerator(name = "sequence_generator", sequenceName = "users_seq", allocationSize = 1)
+@Getter
+@Setter
 public class UserEntity extends LongIdEntity {
 
   private String userName;
@@ -21,44 +24,4 @@ public class UserEntity extends LongIdEntity {
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @PrimaryKeyJoinColumn
   private UserDetailsEntity userDetails;
-
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public LocalDate getBirthDate() {
-    return birthDate;
-  }
-
-  public void setBirthDate(LocalDate birthDate) {
-    this.birthDate = birthDate;
-  }
-
-  public UserDetailsEntity getUserDetails() {
-    return userDetails;
-  }
-
-  public void setUserDetails(UserDetailsEntity userDetails) {
-    this.userDetails = userDetails;
-  }
 }

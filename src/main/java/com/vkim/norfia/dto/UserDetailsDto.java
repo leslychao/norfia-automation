@@ -1,7 +1,11 @@
 package com.vkim.norfia.dto;
 
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class UserDetailsDto extends BaseDto {
 
   private String password;
@@ -10,52 +14,4 @@ public class UserDetailsDto extends BaseDto {
   private boolean accountNonLocked;
   private boolean credentialsNonExpired;
   private boolean enabled;
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<String> getUserRoles() {
-    return userRoles;
-  }
-
-  public void setUserRoles(Set<String> userRoles) {
-    this.userRoles = userRoles;
-  }
-
-  public boolean isAccountNonExpired() {
-    return accountNonExpired;
-  }
-
-  public void setAccountNonExpired(boolean accountNonExpired) {
-    this.accountNonExpired = accountNonExpired;
-  }
-
-  public boolean isAccountNonLocked() {
-    return accountNonLocked;
-  }
-
-  public void setAccountNonLocked(boolean accountNonLocked) {
-    this.accountNonLocked = accountNonLocked;
-  }
-
-  public boolean isCredentialsNonExpired() {
-    return credentialsNonExpired;
-  }
-
-  public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-    this.credentialsNonExpired = credentialsNonExpired;
-  }
-
-  public boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
 }
