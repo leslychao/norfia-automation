@@ -1,6 +1,6 @@
 package com.vkim.norfia.controller;
 
-import static com.vkim.norfia.util.Constats.DEFAULT_USER_ROLES;
+import static com.vkim.norfia.util.Constants.DEFAULT_USER_ROLES;
 
 import com.vkim.norfia.dto.UserDetailsDto;
 import com.vkim.norfia.dto.UserDto;
