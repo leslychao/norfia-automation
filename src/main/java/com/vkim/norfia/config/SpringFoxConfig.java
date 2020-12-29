@@ -1,4 +1,4 @@
-package com.vkim.norfia;
+package com.vkim.norfia.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

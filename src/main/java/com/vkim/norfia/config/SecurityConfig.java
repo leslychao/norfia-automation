@@ -1,4 +1,6 @@
-package com.vkim.norfia.security;
+package com.vkim.norfia.config;
+
+import static com.vkim.norfia.util.ErrorMessages.USER_NOT_FOUND;
 
 import com.vkim.norfia.exceptions.EntityNotFoundException;
 import com.vkim.norfia.repository.UserRepository;
@@ -18,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements
     WebMvcConfigurer {
 
   private final UserRepository userRepository;
@@ -52,8 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
   @Override
   public void configure(AuthenticationManagerBuilder builder) throws Exception {
     builder.userDetailsService(username -> userRepository.findByUserName(username)
-        .orElseThrow(() -> new EntityNotFoundException(
-            String.format("can't find user by login: %s", username))).getUserDetails())
+        .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND.getMessage(username))).getUserDetails())
         .passwordEncoder(passwordEncoder());
   }
 
